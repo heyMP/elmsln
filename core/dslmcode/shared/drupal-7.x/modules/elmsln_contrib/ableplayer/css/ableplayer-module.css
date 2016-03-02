@@ -1,0 +1,55 @@
+/*Responsive Video & Audio*/
+.responsive-container video,
+.responsive-container .able-vidcap-container,
+.responsive-container .able-media-container,
+.responsive-container .able,
+.responsive-container .able-captions,
+.responsive-container .able-column-left {
+	width: 100%    !important;
+	height: auto   !important;
+}
+
+/*.able-column-left is a class for if the video is in the left column and the transcript is in the right*/
+/*when we get transcript working, then this will have to change if the transcript is viable*/
+
+
+/*YouTube Responsive*/
+.field-type-youtube .responsive-container .able-media-container {
+	overflow: hidden;
+	position: relative;
+	padding-bottom: 56.25%;
+	height: 0;
+}
+
+.field-type-youtube .responsive-container .able-media-container iframe {
+	border: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+/*Fixing a firefox issue where the outlines are larger than the buttons*/
+.able-controller button{
+	border: 1px solid transparent;
+	position: static;
+}
+
+/*Random Style fixes*/
+.able-status-bar{
+	height: auto;
+	min-height: 0;
+	overflow: hidden;
+}
+
+.able *{
+	-webkit-box-sizing: content-box;
+	box-sizing: content-box;
+}
+
+/*make ableplayer labels in the transcript box appear on the same line*/
+
+.able-transcript-toolbar label {
+	display: inline-block;
+}

@@ -1,0 +1,349 @@
+<?php
+/**
+ * @file
+ * Adds the ableplayer as a formatter for file fields
+ */
+
+require_once (dirname(__FILE__) . '/ableplayer.inc');
+
+/**
+ * Implements hook_help().
+ */
+function ableplayer_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#ableplayer':
+      $output = '<p>' . t('For setup information, please view the readme.txt file in the ableplayer module folder.') . '</p>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_library().
+ */
+function ableplayer_library() {
+  $path = libraries_get_path('ableplayer');
+  $libraries = array();
+
+  $libraries['ableplayer'] = array(
+    'title' => 'Able Player',
+    'website' => 'https://github.com/ableplayer/ableplayer',
+    'version' => '2.1.0',
+    'js' => array(
+      $path . '/build/ableplayer.min.js' => array('group' => JS_LIBRARY, 'preprocess' => FALSE),
+    ),
+    'css' => array(
+      $path . '/styles/ableplayer.css' => array('group' => CSS_SYSTEM),
+      $path . '/styles/ableplayer-transcript.css' => array('group' => CSS_SYSTEM),
+    ),
+  );
+  return $libraries;
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ *
+ * Defines all the formatter
+ *
+ */
+function ableplayer_field_formatter_info() {
+  $formatters = array();
+
+  $formatters['ableplayer_audio'] = array(
+    'label' => t('Able Player Audio'),
+    'field types' => array('file'),
+    'settings'  => array(
+      'download_mp3' => '1', //default value
+      'responsive' => '1', //default value
+    ),
+  );
+
+  $formatters['ableplayer_video'] = array(
+    'label' => t('Able Player Video'),
+    'field types' => array('file'),
+    'settings'  => array(
+      'video_size' => '420x315',
+      'video_width' => 'NULL', //default value
+      'video_height' => 'NULL', //default value
+    ),
+  );
+
+  $formatters['ableplayer_youtube'] = array(
+    'label' => t('Able Player YouTube'),
+    'field types' => array('youtube'),
+    'settings' => array(
+      'youtube_size' => '420x315',
+      'youtube_width' => NULL,
+      'youtube_height' => NULL,
+      'youtube_autoplay' => FALSE,
+      'youtube_showinfo' => FALSE,
+      'youtube_controls' => FALSE,
+      'youtube_autohide' => FALSE,
+      'youtube_iv_load_policy' => FALSE,
+    ),
+  );
+
+  return $formatters;
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ *
+ * This add the settings form to the display formatter
+ */
+function ableplayer_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode]; //Gets the view_mode where settings are stored
+  $settings = $display['settings']; //Gets the actual settings
+  $element = array(); //Initialize the element variable
+
+  if ($display['type'] == 'ableplayer_audio') {
+    $element['download_mp3'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Download MP3'),
+      '#description' => t('Add a link to download the MP3 file if there is one'),
+      '#default_value' => $settings['download_mp3'],
+    );
+    $element['responsive'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Responsive Player'),
+      '#description' => t('Causes the audio player to stretch to the width of its container'),
+      '#default_value' => $settings['responsive'],
+    );
+
+  }
+
+  if ($display['type'] == 'ableplayer_video') {
+    $element['video_size'] = array(
+      '#type' => 'select',
+      '#title' => t('Video size'),
+      '#options' => ableplayer_size_options(),
+      '#default_value' => $settings['video_size'],
+    );
+    $element['video_width'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Width'),
+      '#size' => 10,
+      '#default_value' => $settings['video_width'],
+      '#states' => array(
+        'visible' => array(
+          ':input[name="fields[' . $field['field_name'] . '][settings_edit_form][settings][video_size]"]' => array('value' => 'custom'),
+        ),
+      ),
+    );
+    $element['video_height'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Height'),
+      '#size' => 10,
+      '#default_value' => $settings['video_height'],
+      '#states' => array(
+        'visible' => array(
+          ':input[name="fields[' . $field['field_name'] . '][settings_edit_form][settings][video_size]"]' => array('value' => 'custom'),
+        ),
+      ),
+    );
+
+  }
+
+  if ($display['type'] == 'ableplayer_youtube') {
+    $element['youtube_size'] = array(
+      '#type' => 'select',
+      '#title' => t('YouTube video size'),
+      '#options' => youtube_size_options(),
+      '#default_value' => $settings['youtube_size'],
+    );
+    $element['youtube_width'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Width'),
+      '#size' => 10,
+      '#default_value' => $settings['youtube_width'],
+      '#states' => array(
+        'visible' => array(
+          ':input[name="fields[' . $field['field_name'] . '][settings_edit_form][settings][youtube_size]"]' => array('value' => 'custom'),
+        ),
+      ),
+    );
+    $element['youtube_height'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Height'),
+      '#size' => 10,
+      '#default_value' => $settings['youtube_height'],
+      '#states' => array(
+        'visible' => array(
+          ':input[name="fields[' . $field['field_name'] . '][settings_edit_form][settings][youtube_size]"]' => array('value' => 'custom'),
+        ),
+      ),
+    );
+    $element['youtube_overridden'] = array(
+      '#type' => 'item',
+      '#title' => t('Note'),
+      '#markup' => t('When using the Able Player display formatter, some of the options that you made in the YouTube module settings page will be overwritten.'),
+    );
+
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ *
+ * Show what settings are currently selected for this field
+ *
+ */
+function ableplayer_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  if ($display['type'] == 'ableplayer_audio') {
+    $describe_download = ($settings['download_mp3'] == 1) ? "with download mp3 link" : "";
+    $describe_responsive = ($settings['responsive'] == 1) ? "Responsive" : "";
+    $summary = t('@responsive Audio player @download', array(
+      '@download' => $describe_download,
+      '@responsive' => $describe_responsive,
+    ));
+  }
+
+  if ($display['type'] == 'ableplayer_video') {
+    $video_sizes = ableplayer_size_options();
+    if (isset($video_sizes[$settings['video_size']])) {
+      $summary = t('Video: @size', array('@size' => $video_sizes[$settings['video_size']]));
+    }
+    else {
+      $summary = t('Video: 450px by 315px');
+    }
+  }
+
+  if ($display['type'] == 'ableplayer_youtube') {
+    $video_sizes = youtube_size_options();
+    if (isset($video_sizes[$settings['youtube_size']])) {
+      $summary = t('YouTube video: @size', array('@size' => $video_sizes[$settings['youtube_size']]));
+    }
+    else {
+      $summary = t('YouTube video: 450px by 315px');
+    }
+  }
+
+  return $summary;
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ *
+ * What to do with each formatter
+ *
+ */
+function ableplayer_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+  $settings = $display['settings']; // get the settings
+
+  switch ($display['type']) {
+
+    case 'ableplayer_audio':
+      $download = $settings['download_mp3']; // download checkbox
+      if (!empty($items)) {
+        $element[0] = array(
+          '#theme' => 'ableplayer_audio_formatter',
+          '#items' => $items,
+          '#ableplayer_setting' => $display['settings']
+        );
+        if ($download == "1" ) {
+          $element[1] = array(
+            '#theme' => 'ableplayer_download_mp3_audio_formatter',
+            '#items' => $items,
+          );
+        }
+
+      }
+      break;
+
+    case 'ableplayer_video':
+      if (!empty($items)) {
+        // Display all values in a single element..
+        $element[0] = array(
+          '#theme' => 'ableplayer_video_formatter',
+          '#items' => $items,
+          '#ableplayer_setting' => $display['settings']
+        );
+      }
+      break;
+
+    case 'ableplayer_youtube':
+      foreach ($items as $delta => $item) {
+        $element[$delta] = array(
+          '#theme' => 'ableplayer_youtube',
+          '#video_id' => $item['video_id'],
+          '#entity_title' => $entity->title,
+          '#size' => array_key_exists('youtube_size', $display['settings']) ? $display['settings']['youtube_size']: NULL,
+          '#width' => array_key_exists('youtube_width', $display['settings']) ? $display['settings']['youtube_width'] : NULL,
+          '#height' => array_key_exists('youtube_height', $display['settings']) ? $display['settings']['youtube_height'] : NULL,
+        );
+      }
+      break;
+  }
+  return $element;
+}
+
+/**
+ * Implements hook_theme().
+ *
+ * Defines the theme functions being used by this module
+ *
+ */
+function ableplayer_theme() {
+  return array(
+    'ableplayer_audio_formatter' => array(
+      'variables' => array(
+        'items' => NULL,
+        'ableplayer_setting' => NULL
+      ),
+      'file' => 'ableplayer.theme.inc',
+    ),
+    'ableplayer_download_mp3_audio_formatter' => array(
+      'variables' => array('items' => NULL),
+      'file' => 'ableplayer.theme.inc',
+    ),
+    'ableplayer_video_formatter' => array(
+      'variables' => array(
+        'items' => NULL,
+        'ableplayer_setting' => NULL
+      ),
+      'file' => 'ableplayer.theme.inc',
+    ),
+    'ableplayer_youtube' => array(
+      'variables' => array(
+        'video_id' => NULL,
+        'entity_title' => NULL,
+        'size' => NULL,
+        'width' => NULL,
+        'height' => NULL,
+        'autoplay' => FALSE,
+        'showinfo' => FALSE,
+        'controls' => FALSE,
+        'autohide' => FALSE,
+        'iv_load_policy' => FALSE,
+      ),
+      'file' => 'ableplayer.theme.inc',
+    ),
+  );
+}
+
+/**
+ * Implements hook_init().
+ *
+ * adds the external files
+ *
+ */
+function ableplayer_init() {
+  drupal_add_library('system', 'jquery.cookie');
+  drupal_add_library('ableplayer', 'ableplayer');
+  drupal_add_css(drupal_get_path('module', 'ableplayer') . '/css/ableplayer-module.css', array(
+    'group' => CSS_DEFAULT,
+    'every_page' => TRUE,
+  ));
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function ableplayer_form_video_node_form_alter(&$form, &$form_state, $form_id) {
+  // krumo($form);
+}

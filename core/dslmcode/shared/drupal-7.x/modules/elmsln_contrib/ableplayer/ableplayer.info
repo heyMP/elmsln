@@ -1,0 +1,10 @@
+name = Ableplayer
+description = The Able Player Module integrates the Able Player jQuery plugin created by the Terrill Thompson with Drupal.
+package = Fields
+core = 7.x
+php = 5.1
+configure = admin/config/media/ableplayer
+files[] = ableplayer.module
+files[] = ableplayer.admin.inc
+dependencies[] = libraries
+dependencies[] = modernizr
