@@ -29,9 +29,32 @@ function cle_critique_menu() {
     'file' => 'node.pages.inc',
     'file path' => drupal_get_path('module', 'node'),
   );
+  $items['cle/critique/critique/%node'] = array(
+    'title' => 'Peer critique',
+    'page callback' => '_cle_critique_critique_page',
+    'page arguments' => array(3),
+    'access callback' => '_cle_critique_critique_peer_access_callback',
+    'access arguments' => array('create', 'cle_critique'),
+    'type' => MENU_NORMAL_ITEM,
+  );
 
   return $items;
 }
+
+function cle_critique_init() {
+  global $user;
+  $settings = array('cleCritique' => array(
+    'user' => array(
+      'name' => $user->name,
+      'uid' => $user->uid,
+      'mail' => $user->mail,
+    ),
+    'restws_csrf_token' => drupal_get_token('restws'),
+    )
+  );
+  drupal_add_js($settings, 'setting');
+}
+
 
 /**
  * Critique interface
@@ -466,15 +489,6 @@ function cle_critique_node_view($node, $view_mode, $langcode) {
 }
 
 /**
- * Impliments hook_form_FORMID_alter()
- *
- * Change the verbiage on the submit button.
- */
-function cle_critique_form_cle_critique_node_form_alter(&$form, &$form_state, $form_id) {
-  $form['actions']['submit']['#value'] = t('Save Critique');
-}
-
-/**
  * Helper function to determine if a user account is the author
  * of a submission.
  * @param  $submission    Node object or node id of the submission.
@@ -500,4 +514,85 @@ function _cle_critique_user_is_submission_author($submission, $account = NULL) {
   }
 
   return $return;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function cle_critique_theme($existing, $type, $theme, $path) {
+  return array(
+    'cle_critique_node_form' => array(
+      'render element' => 'form',
+      'path' => drupal_get_path('module', 'cle_critique') . '/templates',
+      'template' => 'cle-critique-node-form',
+    ),
+    'cle_critique_critique_page' => array(
+      'variables' => array(),
+      'path' => drupal_get_path('module', 'cle_critique') . '/templates',
+      'template' => 'cle-critique-critique-page',
+    ),
+  );
+}
+
+function _cle_critique_critique_page($assignment) {
+  // present a select list if a node hasn't been passed in
+  $submission = NULL;
+  $og_group_ref = '';
+  $assignment_id = $assignment->nid;
+  $url_params = drupal_get_query_parameters();
+  $submission_id = (isset($url_params['submission']) ? $url_params['submission'] : NULL);
+
+  // get a submission
+  if ($assignment_id || $submission_id) {
+    // find out if there is a specific submission to render or if we should
+    // find a random submission
+    if ($submission_id) {
+      $submission = node_load($submission_id);
+    }
+    else {
+      $submission = _cle_critique_random($assignment_id);
+    }
+  }
+
+  // pass Assignment and Submission values along to js
+  $settings = array(
+    'assignment' => $assignment,
+    'submission' => $submission,
+  );
+  drupal_add_js(array('cleCritique' => $settings), 'setting');
+
+  return theme('cle_critique_critique_page');
+}
+
+/**
+ * Impliments hook_preprocess.
+ *
+ * Customize form variables for the cle_critique_node_form template.
+ */
+function cle_critique_preprocess_cle_critique_node_form(&$variables) {
+  $form = &$variables['form'];
+  // hide the 'Critique' label
+  $form['field_cle_crit_feedback']['und'][0]['value']['#title_display'] = 'invisible';
+  $form['actions']['submit']['#value'] = t('Save Critique');
+  $form['actions']['submit']['#attributes']['class'][] = 'waves-effect';
+  $form['actions']['submit']['#attributes']['class'][] = 'btn-large';
+  $form['actions']['submit']['#attributes']['class'][] = 'btn-flat';
+  $form['actions']['submit']['#attributes']['class'][] = 'black';
+  $form['actions']['submit']['#attributes']['class'][] = 'white-text';
+
+  // load submission
+  $submission_obj = NULL;
+  if (isset($form['#node']->field_cle_crit_sub_ref['und'][0]['target_id'])) {
+    $submission_obj = node_load($form['#node']->field_cle_crit_sub_ref['und'][0]['target_id']);
+  }
+  $variables['submission'] = $submission_obj;
+
+  // load the assignment
+  $assignment_obj = NULL;
+  if ($submission_obj && isset($submission_obj->field_assignment['und'][0]['entity'])) {
+    $assignment_obj = $submission_obj->field_assignment['und'][0]['entity'];
+    $assignment = node_view($assignment_obj);
+    unset($submission_obj->field_assignment['und'][0]['entity']);
+  }
+  $variables['assignment'] = $assignment_obj;
 }

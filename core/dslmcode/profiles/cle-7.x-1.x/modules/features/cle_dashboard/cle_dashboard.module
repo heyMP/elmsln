@@ -92,7 +92,7 @@ function cle_dashboard_preprocess_cle_dashboard(&$variables) {
       if (isset($result->field_field_cle_crit_type) && $type = $result->field_field_cle_crit_type) {
         if ($type[0]['raw']['value'] != 'none') {
           $critique->active = TRUE;
-          $critique->url = base_path() . 'cle/critique/critique-peer/' . $result->nid . '?og_group_ref=' . $result->node_og_membership_nid;
+          $critique->url = base_path() . 'cle/critique/critique/' . $result->nid . '?og_group_ref=' . $result->node_og_membership_nid;
           $assignments[$result->nid]->critique = $critique;
           $assignments[$result->nid]->completed = FALSE;
         }

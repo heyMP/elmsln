@@ -1,0 +1,5 @@
+name = "RestWS Render"
+description = "Enables the option to output rendered HTML view modes of entities in
+RestWS."
+core = "7.x"
+dependencies[] = restws

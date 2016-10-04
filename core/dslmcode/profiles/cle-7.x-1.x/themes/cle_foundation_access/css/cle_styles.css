@@ -61,38 +61,38 @@
   padding: 2em;
 }
 
-#cle-critique-node-form ~ div {
-  max-width: 90em;
-  margin: 0 auto;
-  display: block;
-}
+/* #cle-critique-node-form ~ div { */
+/*   max-width: 90em; */
+/*   margin: 0 auto; */
+/*   display: block; */
+/* } */
 
-#cle-critique-node-form .node-cle-submission {
-  width: 60%;
-  float: left;
-  padding: 1em;
-}
+/* #cle-critique-node-form .node-cle-submission { */
+/*   width: 60%; */
+/*   float: left; */
+/*   padding: 1em; */
+/* } */
 
-#cle-critique-node-form .field-name-field-cle-crit-feedback {
-  width: 40%;
-  float: right;
-  padding: 1em;
-  right: 0;
-  transition: all .5s ease;
-}
+/* #cle-critique-node-form .field-name-field-cle-crit-feedback { */
+/*   width: 40%; */
+/*   float: right; */
+/*   padding: 1em; */
+/*   right: 0; */
+/*   transition: all .5s ease; */
+/* } */
 
-#cle-critique-node-form .field-name-field-cle-crit-feedback.is-closed {
-  transform: translateX(100%);
-}
+/* #cle-critique-node-form .field-name-field-cle-crit-feedback.is-closed { */
+/*   transform: translateX(100%); */
+/* } */
 
-#cle-critique-node-form .field-name-field-cle-crit-feedback.is-closed .cle-critique__hide-feedback {
-  display: flex;
-}
-#cle-critique-node-form .field-name-field-cle-crit-feedback.is-closed .cle-critique__hide-feedback {
-  position: absolute;
-  left: 0;
-  transform: translateX(-100%);
-}
+/* #cle-critique-node-form .field-name-field-cle-crit-feedback.is-closed .cle-critique__hide-feedback { */
+/*   display: flex; */
+/* } */
+/* #cle-critique-node-form .field-name-field-cle-crit-feedback.is-closed .cle-critique__hide-feedback { */
+/*   position: absolute; */
+/*   left: 0; */
+/*   transform: translateX(-100%); */
+/* } */
 
 #cle-critique-node-form .text-format-wrapper {
   opacity: 1;
@@ -105,3 +105,45 @@
   display: none;
 }
 
+
+//crit
+#cle-critique-node-form .collection .collection-item.avatar p {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  padding-right: 2rem;
+  padding-left:0;
+}
+#cle-critique-node-form .collection .collection-item.avatar p.reply {
+  padding-right: 0;
+}
+#cle-critique-node-form textarea.materialize-textarea {
+  min-height:8rem;
+}
+
+#cle-critique-node-form ul.collection {
+  background:#e0e0e0;
+}
+#cle-critique-node-form .indent {
+  margin-left:2rem !important;
+}
+#cle-critique-node-form .indent-indent {
+  margin-left:4rem !important;
+}
+.instructor {
+
+}
+#cle-critique-node-form .uppercase {
+  text-transform: uppercase;
+}
+#cle-critique-node-form .collapsible-body {
+  background-color: #fff;
+}
+#cle-critique-node-form .cke_chrome {
+  border: none;
+}
+#cle-critique-node-form .cke_contents {
+  border:none !important;
+}
+.cle_critique__directions .collapsible-body {
+  padding: 1em;
+}

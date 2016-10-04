@@ -1,0 +1,26 @@
+(function ($) {
+  Drupal.behaviors.cleCritique = {
+    attach: function (context, settings) {
+      angular.module('cleCritique', ['ngSanitize'])
+        .controller('cleCritiqueController', ['$scope', '$http', function($scope, $http) {
+          var baseUrl = Drupal.settings.basePath;
+          var submissionID = '6';
+          var url = baseUrl + 'node/' +  submissionID + '.json?type=assignment&deep-load-refs=field_collection_item,node';
+          $http.get(url)
+          .then(function(response) {
+            var submission = response.data;
+
+            if (submission.field_cle_crit_criteria.und) {
+              var _odlTxt = submission.field_cle_crit_criteria.und;
+              var _newTxt = Drupal.formatString(_oldTxt);
+            }
+
+            $scope.submission = submission;
+            // format the directions
+          });
+        }])
+      ; // end Angular
+    }
+  };
+}(jQuery));
+

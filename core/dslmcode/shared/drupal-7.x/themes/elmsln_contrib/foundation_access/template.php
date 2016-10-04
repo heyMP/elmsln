@@ -192,6 +192,7 @@ function foundation_access_preprocess_page(&$variables) {
   }
 }
 
+
 /**
  * Implementation of hook_preprocess_node().
  */

@@ -1,0 +1,72 @@
+<?php
+
+/**
+ * Alter the outgoing response.
+ *
+ * related support issue https://drupal.org/node/2024603
+ *
+ * @param mixed $response
+ *   The response data being returned by the REST service (not yet serialized).
+ *
+ * @param string $function
+ *   The function being called on the REST service.
+ *
+ * @param string $format
+ *   The name of the format serializing the response.
+ */
+function restws_render_restws_response_alter(&$response, $function, $formatName) {
+  if ($function == 'viewResource' && $formatName == 'json') {
+    $q_params = drupal_get_query_parameters();
+    if (isset($q_params['render'])) {
+
+      // assemble the array of viewmodes
+      $viewmodes = _restws_render_viewmode_list_from_query_paramters($q_params['render']);
+      ddl($q_params);
+
+      if (isset($response['list'])) {
+        foreach ($response['list'] as &$node) {
+          if (isset($node['nid'])) {
+            $node_obj = node_load($node['nid']);
+            foreach($viewmodes as $vm) {
+              $node['rendered'][$vm] = render(node_view($node_obj, $vm));
+            }
+          }
+        }
+      }
+      elseif (isset($response['nid'])) {
+        $node_obj = node_load($response['nid']);
+        foreach($viewmodes as $vm) {
+          $response['rendered'][$vm] = render(node_view($node_obj, $vm));
+        }
+      }
+    }
+  }
+
+}
+
+/**
+ * Helper function to assemble a proper array of viewmodes from a query
+ * parameter.
+ */
+function _restws_render_viewmode_list_from_query_paramters($query_param) {
+  $viewmodes = array();
+  ddl($query_param);
+  if ($query_param != '') {
+    $viewmodes = explode(',', $query_param);
+  }
+  else {
+    $viewmodes = array('full');
+  }
+
+  // make sure the specified viewmodes are available
+  $e = entity_get_info('node');
+  $available_viewmodes = array_keys($e['view modes']);
+  foreach ($viewmodes as $key => $vm) {
+    // if the specified viewmode isn't in the available viewmode list then remove it
+    if (!in_array($vm, $available_viewmodes)) {
+      unset($viewmodes[$key]);
+    }
+  }
+
+  return $viewmodes;
+}

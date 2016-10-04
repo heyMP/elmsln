@@ -23,7 +23,7 @@
           <b>{{assignment.node_title}} Peer Review</b>
           <i class="material-icons right-align">comment</i>
           <div class="secondary-content">
-            <span class="chip completed" ng-if="assignment.critique.completed"> <i class="material-icons">check</i> Done </span>
+            <span class="chip completed" ng-if="assignment.critique.completed"> Done <i class="material-icons">check</i></span>
           </div>
           <div class="meta-content">
           </div>
