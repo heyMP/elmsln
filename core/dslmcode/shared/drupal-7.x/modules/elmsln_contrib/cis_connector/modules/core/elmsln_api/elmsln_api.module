@@ -51,7 +51,7 @@ function elmsln_api_menu() {
   // tee-up our application
   $items['api/v1/elmsln/user'] = array(
     'page callback' => '_elmsln_api_user_request',
-    'access callback' => 'user_is_logged_in',
+    'access callback' => 'restws_user_is_logged_in_or_options',
     'type' => MENU_CALLBACK,
   );
   return $items;
@@ -61,18 +61,20 @@ function elmsln_api_menu() {
  * to connect to the site. This assumes a user session already exists.
  */
 function _elmsln_api_user_request() {
-  drupal_add_http_header('Content-Type', 'application/json');
-  $vars = array(
-    'site' => array(
-      'base-url' => $GLOBALS['base_url'],
-    ),
-    'user' => array(
-      'uid' => $GLOBALS['user']->uid,
-      'csrf-token' => drupal_get_token('restws'),
-    ),
-  );
-  print drupal_json_output($vars);
-  drupal_exit();
+  if(user_is_logged_in()) {
+    drupal_add_http_header('Content-Type', 'application/json');
+    $vars = array(
+      'site' => array(
+        'base-url' => $GLOBALS['base_url'],
+      ),
+      'user' => array(
+        'uid' => $GLOBALS['user']->uid,
+        'csrf-token' => drupal_get_token('restws'),
+      ),
+    );
+    print drupal_json_output($vars);
+    drupal_exit();
+  }
 }
 
 /**
@@ -1077,4 +1079,3 @@ function elmsln_api_elmsln_api_info() {
 
   return $callbacks;
 }
-
