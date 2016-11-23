@@ -2,3 +2,11 @@
   float: left;
   margin-right: 1em;
 }
+
+.status {
+  float: right;
+  size: .9em;
+}
+.status.complete {
+  color: green;
+}

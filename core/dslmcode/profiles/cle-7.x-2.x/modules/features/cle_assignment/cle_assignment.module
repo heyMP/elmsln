@@ -37,7 +37,7 @@ function _cle_assignments_v1_cle() {
 
   // assemble the call
   $vars['links'] = array(
-    'self' => current_path(),
+    'self' => $base_url . '/api/v1/cle/',
     'assignments' => $base_url . '/api/v1/cle/assignments',
   );
 
@@ -60,7 +60,7 @@ function _cle_assignemnts_v1_cle_assignments() {
   // under the 'data' property
   foreach ($assignments as $assignment) {
     $_assignment = _cle_assignment_v1_assignment_output($assignment);
-    $vars['data'][] = array($_assignment);
+    $vars['data'][] = $_assignment;
   }
 
   // output the assginments
@@ -78,7 +78,7 @@ function _cle_assignemnts_v1_cle_assignment($assignment_id) {
 
   // assemble the call
   $vars['links'] = array(
-    'self' => current_path()
+    'self' => $base_url . '/api/v1/cle/assignments',
   );
   // place the formatted assignment under the 'data' property
   $vars['data'] = $assignment_apiformat;
@@ -103,6 +103,7 @@ function _cle_assignment_v1_assignment_output($assignment) {
   $return = array(
     'type' => 'assignment',
     'id' => (int)$assignment->nid,
+    'title' => $assignment->title,
     'status' => (int)$assignment->status,
     'created' => (int)$assignment->created,
     'body' => $assignment->body[LANGUAGE_NONE][0]['safe_value'],
@@ -122,7 +123,8 @@ function _cle_assignment_v1_assignment_output($assignment) {
       'style' => _cle_random(array('double_blind', 'blind', 'open')),// default: double blind
       'outline' => _cle_random(array('', 'Outline A')), //optional @todo: not sure what this is for
       'public' => _cle_random(array('public', 'private')), // default: public
-    )
+    ),
+    'complete' => _cle_random(array(0,1)), // determines whether the assignment is complete.
   );
 
   return $return;

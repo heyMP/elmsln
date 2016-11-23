@@ -5,10 +5,11 @@
       <md-card-title>{{assignment.title}}</md-card-title>
       <md-card-content>
       </md-card-content>
+      <div *ngIf="assignment.complete == 1" class="status complete">Complete</div>
+      <div *ngIf="assignment.complete == 0" class="status">Incomplete</div>
       <md-card-actions>
-        <button md-button (click)="viewAssignment(assignment.nid)">View assignment</button>
+        <button md-button (click)="viewAssignment(assignment.id)">View assignment</button>
       </md-card-actions>
-      <div class="status">{{ assignment.complete }}</div>
     </md-card>
   </div>
 </div>
