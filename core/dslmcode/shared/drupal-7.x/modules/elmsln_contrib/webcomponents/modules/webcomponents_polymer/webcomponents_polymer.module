@@ -22,61 +22,49 @@ function webcomponents_polymer_register_component_format() {
  * Implements hook_page_build().
  */
 function webcomponents_polymer_page_build(&$page) {
-  drupal_add_js(drupal_get_path('theme', $GLOBALS['theme_key']) . '/polymer/bower_components/webcomponentsjs/webcomponents-lite.min.js');
+  $polymer_dir = variable_get('webcomponents_polymer_directory', NULL);
+  if ($polymer_dir) {
+    drupal_add_js($polymer_dir . '/webcomponentsjs/webcomponents-lite.min.js');
+    drupal_add_js('window.Polymer = { dom: "shadow"};', 'inline');
+  }
 }
 
 /**
  * Implements hook_webcomponents().
  */
 function webcomponents_polymer_webcomponents() {
-  // look through all themes for polymer components
-  $themes = list_themes();
-  $active = $GLOBALS['theme_key'];
-  $lookup = array();
-  // hit active theme
-  if (isset($themes[$active])) {
-    $lookup[] = $active;
-    // look for base themes
-    while (isset($themes[$active]->base_theme)) {
-      $active = $themes[$active]->base_theme;
-      $lookup[] = $active;
-    }
-  }
-  // ensure we have a theme...
-  if (!empty($lookup)) {
-    // skip through each theme to find polymer components
-    foreach ($lookup as $theme) {
-      // look for polymer webcomponents in the active theme
-      $dir = drupal_get_path('theme', $theme) . '/' . WEBCOMPONENTS_POLYMER_LOCATION . '/';
-      // see if we have default file
-      if (file_exists($dir . '/' . WEBCOMPONENTS_POLYMER_INDEX)) {
-        $files = array();
-        // step into the polymer directory and find all html templates
-        $di = new DirectoryIterator($dir);
-        foreach ($di as $fileinfo) {
-          $fname = $fileinfo->getFilename();
+  $polymer_dir = variable_get('webcomponents_polymer_directory', NULL);
+  $files = array();
+
+  ddl('Processing: ' . $polymer_dir);
+
+  if ($polymer_dir) {
+    $files = array();
+    $dir = $polymer_dir . '/';
+    // step into the polymer directory and find all html templates
+    $di = new DirectoryIterator($polymer_dir);
+    foreach ($di as $fileinfo) {
+      $fname = $fileinfo->getFilename();
+      // only include html file, not index
+      if (strpos($fname, '.html') && $fname != 'index.html') {
+        $files[] = $dir . $fileinfo->getFilename();
+      }
+      // @todo we need to be careful here so that we don't timeout here
+      elseif (is_dir($dir . $fname) && $fname != '.' && $fname != '..') {
+        $di2 = new DirectoryIterator($dir . $fname);
+        foreach ($di2 as $fileinfo2) {
+          $fname2 = $fileinfo2->getFilename();
           // only include html file, not index
-          if (strpos($fname, '.html') && $fname != 'index.html') {
-            $files[] = $dir . $fileinfo->getFilename();
+          if (strpos($fname2, '.html') && $fname2 != 'index.html') {
+            $files[] = $dir . $fname . '/' . $fname2;
           }
-          // @todo we need to be careful here so that we don't timeout here
-          elseif (is_dir($dir . $fname) && $fname != '.' && $fname != '..') {
-            $di2 = new DirectoryIterator($dir . $fname);
-            foreach ($di2 as $fileinfo2) {
-              $fname2 = $fileinfo2->getFilename();
+          elseif (is_dir($dir . $fname . '/' . $fname2) && $fname2 != '.' && $fname2 != '..') {
+            $di3 = new DirectoryIterator($dir . $fname . '/' . $fname2);
+            foreach ($di3 as $fileinfo3) {
+              $fname3 = $fileinfo3->getFilename();
               // only include html file, not index
-              if (strpos($fname2, '.html') && $fname2 != 'index.html') {
-                $files[] = $dir . $fname . '/' . $fname2;
-              }
-              elseif (is_dir($dir . $fname . '/' . $fname2) && $fname2 != '.' && $fname2 != '..') {
-                $di3 = new DirectoryIterator($dir . $fname . '/' . $fname2);
-                foreach ($di3 as $fileinfo3) {
-                  $fname3 = $fileinfo3->getFilename();
-                  // only include html file, not index
-                  if (strpos($fname3, '.html') && $fname3 != 'index.html') {
-                    $files[] = $dir . $fname . '/' . $fname2 . '/' . $fname3;
-                  }
-                }
+              if (strpos($fname3, '.html') && $fname3 != 'index.html') {
+                $files[] = $dir . $fname . '/' . $fname2 . '/' . $fname3;
               }
             }
           }
@@ -84,6 +72,7 @@ function webcomponents_polymer_webcomponents() {
       }
     }
   }
+  ddl($files);
   // group these all as files found to match polymer format
   return array(WEBCOMPONENTS_POLYMER_NAME => $files);
 }

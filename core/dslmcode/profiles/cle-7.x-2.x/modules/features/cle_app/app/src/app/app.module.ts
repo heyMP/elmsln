@@ -1,6 +1,6 @@
 import { ModuleImport } from 'angular-cli/utilities/get-dependent-files';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { routing } from './app.routing';
@@ -126,6 +126,7 @@ import { SubmissionCritiqueComponent } from './submission/submission-critique/su
     SubmissionService,
     ProjectService
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

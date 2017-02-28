@@ -18,6 +18,8 @@
   "dependencies": {
     "froala-wysiwyg-editor": "^2.3.5",
     "wysiwyg.js": "*",
-    "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^1.5.0"
+    "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^1.5.0",
+    "paper-elements": "^1.0.7",
+    "vaadin-combo-box": "^1.3.0"
   }
 }

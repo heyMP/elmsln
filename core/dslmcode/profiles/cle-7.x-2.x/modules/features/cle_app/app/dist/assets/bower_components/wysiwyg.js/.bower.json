@@ -1,0 +1,39 @@
+{
+  "name": "wysiwyg.js",
+  "version": "2.0.0",
+  "description": "wysiwyg contenteditable editor (lightweight + cross browser)",
+  "homepage": "http://wysiwygjs.github.io/",
+  "keywords": [
+    "wysiwyg",
+    "contenteditable",
+    "editor",
+    "rich editor",
+    "rich text editor",
+    "javascript"
+  ],
+  "main": [
+    "dist/wysiwyg.min.js",
+    "dist/wysiwyg-editor.min.js",
+    "dist/wysiwyg-editor.min.css"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wysiwygjs/wysiwyg.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wysiwygjs/wysiwyg.js/issues"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "jquery": ">=1.11.0"
+  },
+  "_release": "2.0.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.0.0",
+    "commit": "c4b8382b74dc05888fb33df8ba0039fd4b3bd24f"
+  },
+  "_source": "https://github.com/wysiwygjs/wysiwyg.js.git",
+  "_target": "*",
+  "_originalSource": "wysiwyg.js"
+}

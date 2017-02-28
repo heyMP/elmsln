@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function webcomponents_polymer_install() {
+  variable_set('webcomponents_polymer_directory', NULL);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function webcomponents_polymer_uninstall() {
+  variable_del('webcomponents_polymer_directory');
+}

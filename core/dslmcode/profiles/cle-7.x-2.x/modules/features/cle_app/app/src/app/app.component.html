@@ -12,3 +12,6 @@
     <router-outlet name="dialog"></router-outlet>
   </div>
 </div>
+
+<vaadin-combo-box [label]="myLabel" [value]="myValue" (selected-item-changed)="myValue=$event.detail.value" [items]="myItems"></vaadin-combo-box>
+<paper-input [value]="myValue" (input)="myValue = $event.target.value"></paper-input>
