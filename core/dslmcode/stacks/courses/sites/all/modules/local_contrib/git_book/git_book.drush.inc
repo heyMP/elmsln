@@ -76,7 +76,7 @@ function drush_git_book_create($repo_url, $parser, $branch) {
     $node->field_git_repo[LANGUAGE_NONE][0]['value'] = $repo_url;
     $node->field_git_parser[LANGUAGE_NONE][0]['value'] = $parser;
     $node->field_git_branch[LANGUAGE_NONE][0]['value'] = $branch;
-    $node->field_git_push[LANGUAGE_NONE][0]['value'] = $push;
+    $node->field_git_push[LANGUAGE_NONE][0]['value'] = (bool)$push;
     $node->field_git_push_branch[LANGUAGE_NONE][0]['value'] = $push_branch;
     // save which will kick off processing of the node
     node_save($node);
