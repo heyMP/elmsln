@@ -363,7 +363,20 @@ function _git_book_get_status($repo) {
       $status = $matches[1];
     }
   }
+
+  // get list of branches
+  $braches = _git_book_get_branch_list($repo);
+
   return $status;
+}
+
+function _git_book_get_branch_list($repo) {
+  $return = array();
+  $raw = @$repo->run('git branch -l');
+  $array = explode(PHP_EOL, $raw);
+  ddl($array);
+
+  return $return;
 }
 
 /**
