@@ -25,7 +25,7 @@ function git_book_drush_command() {
     ),
     'options' => array(
       'push' => 'Boolean to set the repo to push on node changes.',
-      'push_branch' => 'Specify a different branch to push your changes to.',
+      'merge_branch' => 'Specify a different branch to push your changes to.',
     ), 
   );
   $commands['git-book-sync'] = array(
@@ -53,7 +53,7 @@ function git_book_drush_command() {
 function drush_git_book_create($repo_url, $parser, $branch) {
   // get the push option
   $push = drush_get_option('push', FALSE);
-  $push_branch = drush_get_option('push_branch', '');
+  $merge_branch = drush_get_option('merge_branch', '');
   // make a path out of the repo name
   $tmp = explode('/', str_replace('.git', '', $repo_url));
   $title = array_pop($tmp);
@@ -76,8 +76,8 @@ function drush_git_book_create($repo_url, $parser, $branch) {
     $node->field_git_repo[LANGUAGE_NONE][0]['value'] = $repo_url;
     $node->field_git_parser[LANGUAGE_NONE][0]['value'] = $parser;
     $node->field_git_branch[LANGUAGE_NONE][0]['value'] = $branch;
-    $node->field_git_push[LANGUAGE_NONE][0]['value'] = (bool)$push;
-    $node->field_git_push_branch[LANGUAGE_NONE][0]['value'] = $push_branch;
+    // $node->field_git_push[LANGUAGE_NONE][0]['value'] = ($push != '' ? $push : FALSE);
+    $node->field_git_merge_branch[LANGUAGE_NONE][0]['value'] = $merge_branch;
     // save which will kick off processing of the node
     node_save($node);
     drush_print(dt('git book @repo_url successfully imported as @title', array('@repo_url' => $repo_url, '@title' => $title)));

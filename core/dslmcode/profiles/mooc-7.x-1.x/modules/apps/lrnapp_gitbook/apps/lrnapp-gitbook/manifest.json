@@ -1,14 +1,15 @@
 {
   "name": "lrnapp-gitbook",
-  "short_name": "lrnapp-gitbook",
-  "title": "LRN Gitbook app",
-  "description": "single page app for gitbook",
+  "description": "",
   "start_url": "/",
   "display": "standalone",
-  "drupal": {
-    "data": {
-      "callback": "_mooc_page_gitbook",
-      "property": "source-path"
+  "app_integration": {
+    "title": "Gitbook",
+    "endpoints": {
+      "books": {
+        "callback": "_lrnapp_gitbook_books_callback",
+        "property": "source-path"
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 <?php
 
-function _mooc_page_gitbook($machine_name, $app_route) {
+function _lrnapp_gitbook_books_callback($machine_name, $app_route) {
   $return = array();
   // load all gitbook nodes
   $query = new EntityFieldQuery();
