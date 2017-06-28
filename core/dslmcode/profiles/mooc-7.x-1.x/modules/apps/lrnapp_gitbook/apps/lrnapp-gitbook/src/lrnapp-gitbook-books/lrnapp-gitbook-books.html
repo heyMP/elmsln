@@ -17,9 +17,9 @@
       handle-as="json"
       last-response="{{books}}"></iron-ajax>
 
-      <template is="dom-if" if="[[books]]">
-        <template is="dom-repeat" items="[[books]]">
-          <lrnapp-gitbook-book name="[[item.title]]"></lrnapp-gitbook-book>
+      <template is="dom-if" if="[[books.data]]">
+        <template is="dom-repeat" items="[[books.data]]">
+          <lrnapp-gitbook-book name="[[item.title]]" end-point="[[endPoint]]"></lrnapp-gitbook-book>
         </template>
       </template>
 

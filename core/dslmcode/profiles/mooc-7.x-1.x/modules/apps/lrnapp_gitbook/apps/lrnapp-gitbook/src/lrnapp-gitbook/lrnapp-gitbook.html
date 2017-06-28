@@ -21,22 +21,19 @@
     <app-location route="{{route}}"></app-location>
     <app-route
         route="{{route}}"
-        pattern="/:page"
+        pattern="[[endPoint]]/:page"
         data="{{data}}"
         tail="{{tail}}">
     </app-route>
-
+    
     <lrnapp-gitbook-book-page name="books" route="{{tail}}" end-point="[[endPoint]]" csrf-token="[[csrfToken]]"></lrnapp-gitbook-book-page>
     
   </template>
   <script>
     Polymer({
       is: 'lrnapp-gitbook',
-      Behaviors: [SecureRequest.xhr],
+      behaviors: [SecureRequest.xhr],
       properties: {
-        basePath: {
-          type: String
-        }
       }
     });
   </script>

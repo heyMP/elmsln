@@ -10,15 +10,15 @@
         "callback": "_lrnapp_gitbook_books_callback",
         "property": "source-path"
       },
-      "api/canmerge": {
+      "api/books/%": {
+        "callback": "_lrnapp_gitbook_book_callback",
+        "property": "source-path"
+      },
+      "api/books/%/canmerge": {
         "callback": "_lrnapp_gitbook_canmerge_callback",
         "property": "source-path"
       },
-      "api/sync": {
-        "callback": "_lrnapp_gitbook_sync_callback",
-        "property": "source-path"
-      },
-      "api/commits": {
+      "api/books/%/sync": {
         "callback": "_lrnapp_gitbook_sync_callback",
         "property": "source-path"
       }

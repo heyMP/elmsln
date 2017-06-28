@@ -13,11 +13,14 @@
       }
     </style>
     <div class="wrapper">
-      <iron-ajax
-        auto
-        url="[[generateURL('api/canmerge', endPoint, csrfToken)]]"
-        handle-as="json"
-        last-response="{{canMerge}}"></iron-ajax>
+      
+      <template is="dom-if" if="[[canMergeUrl]]">
+        <iron-ajax
+          auto
+          url="[[canMergeUrl]]"
+          handle-as="json"
+          last-response="{{canMerge}}"></iron-ajax>
+      </template>
 
       <div class="button-wrapper">
         <paper-button raised id="sync-button" disabled="{{_canSync(canMerge, syncing)}}">Sync Now</paper-button>
@@ -31,6 +34,8 @@
         on-response="_syncResponse"
         loading="{{syncing}}"></iron-ajax>
     </div>
+
+    [[canMergeUrl]]
 
   </template>
   <script>
@@ -47,6 +52,10 @@
           type: Boolean,
           value: false,
           notify: true
+        },
+        canMergeUrl: {
+          type: String,
+          computed: '_computeCanMergeUrl(book, endPoint, csrfToken)'
         }
       },
       listeners: {
@@ -55,6 +64,9 @@
       observers: [
         '_syncingChanged(syncing)'
       ],
+      _computeCanMergeUrl(book, end, token) {
+        return this.generateURL('api/'+ book +'/', end, token)
+      },
       _syncingChanged: function(syncing) {
       },
       _canSync: function(canMerge, syncing) {
