@@ -6,8 +6,20 @@
   "app_integration": {
     "title": "Gitbook",
     "endpoints": {
-      "books": {
+      "api/books": {
         "callback": "_lrnapp_gitbook_books_callback",
+        "property": "source-path"
+      },
+      "api/canmerge": {
+        "callback": "_lrnapp_gitbook_canmerge_callback",
+        "property": "source-path"
+      },
+      "api/sync": {
+        "callback": "_lrnapp_gitbook_sync_callback",
+        "property": "source-path"
+      },
+      "api/commits": {
+        "callback": "_lrnapp_gitbook_sync_callback",
         "property": "source-path"
       }
     }

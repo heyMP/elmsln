@@ -30,3 +30,27 @@ function _lrnapp_gitbook_books_callback($machine_name, $app_route) {
     'data' => $return
   );
 }
+
+function _lrnapp_gitbook_canmerge_callback($machine_name, $app_route) {
+  $return = array();
+  return array(
+    'status' => '200',
+    'data' => $return
+  );
+}
+
+function _lrnapp_gitbook_sync_callback($machine_name, $app_route) {
+  $return = array();
+  return array(
+    'status' => '200',
+    'data' => $return
+  );
+}
+
+function _lrnapp_gitbook_commits_callback($machine_name, $app_route) {
+  $return = array();
+  return array(
+    'status' => '200',
+    'data' => $return
+  );
+}

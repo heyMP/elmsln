@@ -1,0 +1,57 @@
+<link rel="import" href="../../bower_components/lrn-gitgraph/lrn-gitgraph.html">
+<!--<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">-->
+<link rel="import" href="../../bower_components/secure-request/secure-request.html">
+
+<dom-module id="lrnapp-gitbook-commits">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <template is="dom-if" if="[[url]]">
+      <iron-ajax
+        auto
+        url="[[generateURL('api/commits', endPoint, csrfToken)]]"
+        handle-as="json"
+        last-response="{{commits}}"></iron-ajax>
+
+        <div is="dom-if" if="[[commits]]">
+          <lrn-gitgraph orientation="vertical-reverse" commits="[[commits]]"></lrn-gitgraph>
+        </div>
+    </template>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'lrnapp-gitbook-commits',
+      behaviors: [SecureRequest.xhr],
+      properties: {
+        book: {
+          type: String
+        },
+        url: {
+          type: String,
+          computed: 'computeUrl(book)'
+        },
+        commits: {
+          type: Object
+        }
+      },
+      observers: [
+        '_bookChanged(book)'
+      ],
+      computeUrl: function(book) {
+        return 'http://localhost:1337/api/books/' + book + '/commits';
+      },
+      _bookChanged: function(book, old) {
+        var root = this;
+        // clear commits if book changes.
+        if (book !== old) {
+          root.commits = [];
+        }
+      }
+    });
+  </script>
+</dom-module>

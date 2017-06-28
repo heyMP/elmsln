@@ -1,4 +1,7 @@
-<link rel="import" href="../lrn-gitbook-sync/lrn-gitbook-sync.html">
+<link rel="import" href="../lrnapp-gitbook-book-page/lrnapp-gitbook-book-page.html">
+<link rel="import" href="../lrnapp-gitbook-books/lrnapp-gitbook-books.html">
+<link rel="import" href="./lrnapp-gitbook-about-page.html">
+<link rel="import" href="../../bower_components/secure-request/secure-request.html">
 
 <dom-module id="lrnapp-gitbook">
   <template>
@@ -12,71 +15,29 @@
         margin: 0;
         min-width: 1rem;
       }
+      lrn-gitbook-book {
+      }
     </style>
-      <template is="dom-if" if="[[repos]]">
-        <template is="dom-repeat" items="[[repos]]">
-          <lrn-gitbook-sync title="[[item.title]]" status="[[item.status]]"></lrn-gitbook-sync>
-        </template>
-      </template>
+    <app-location route="{{route}}"></app-location>
+    <app-route
+        route="{{route}}"
+        pattern="/:page"
+        data="{{data}}"
+        tail="{{tail}}">
+    </app-route>
 
-      <iron-ajax
-        auto
-        id="ajax"
-        params="{{requestParams}}"
-        url="[[source-path]]"
-        handle-as="json"
-        on-response="handleResponse"></iron-ajax>
-
-        {{source-path}}
-    <!--</template>-->
+    <lrnapp-gitbook-book-page name="books" route="{{tail}}" end-point="[[endPoint]]" csrf-token="[[csrfToken]]"></lrnapp-gitbook-book-page>
+    
   </template>
-
   <script>
     Polymer({
       is: 'lrnapp-gitbook',
+      Behaviors: [SecureRequest.xhr],
       properties: {
-        nodeId: {
+        basePath: {
           type: String
-        },
-        requestParams: {
-          type: Object,
-          value: {}
-        },
-        repos: {
-          type: Object,
         }
-      },
-      observers: [
-        '_nodeIdChange(nodeId)'
-      ],
-      listeners: {
-        'gitbook-sync-clicked': '_gitbookSycnedClicked'
-      },
-      _gitbookSycnedClicked: function(e) {
-        console.log('synced clicked', e);
-      },
-      _nodeIdChange: function(nodeId) {
-        this.requestParams = {nodeId: nodeId};
-      },
-      _nodeIdIsset: function(nodeId) {
-        if (nodeId) {
-          return true;
-        }
-      },
-      handleResponse: function(res) {
-        let root = this;
-        var response = res.detail.response.data;
-        this.repos = response;
-        console.log(response);
-      },
-      /**
-       * Simple way to convert from object to array.
-       */
-      _toArray: function(obj) {
-        return Object.keys(obj).map(function(key) {
-          return obj[key];
-        });
-      },
+      }
     });
   </script>
 </dom-module>

@@ -1,0 +1,3 @@
+[submodule "lrnservice-gitbook"]
+	path = lrnservice-gitbook
+	url = git@github.com:LRNWebComponents/lrnservice-gitbook.git

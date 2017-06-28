@@ -1,0 +1,37 @@
+<link rel="import" href="../lrnapp-gitbook-book/lrnapp-gitbook-book.html">
+<link rel="import" href="../../bower_components/secure-request/secure-request.html">
+
+<dom-module id="lrnapp-gitbook-books">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        background-color: lightgray;
+        min-height: 100px;
+      }
+    </style>
+
+    <iron-ajax
+      auto
+      url="[[generateURL('api/books', endPoint, csrfToken)]]"
+      handle-as="json"
+      last-response="{{books}}"></iron-ajax>
+
+      <template is="dom-if" if="[[books]]">
+        <template is="dom-repeat" items="[[books]]">
+          <lrnapp-gitbook-book name="[[item.title]]"></lrnapp-gitbook-book>
+        </template>
+      </template>
+
+    <content></content>
+    
+  </template>
+  <script>
+    Polymer({
+      is: 'lrnapp-gitbook-books',
+      behaviors: [SecureRequest.xhr],
+      ready: function() {
+      }
+    });
+  </script>
+</dom-module>

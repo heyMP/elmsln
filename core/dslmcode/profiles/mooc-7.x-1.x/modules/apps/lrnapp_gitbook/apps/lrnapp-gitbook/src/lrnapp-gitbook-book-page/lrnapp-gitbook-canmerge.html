@@ -1,0 +1,85 @@
+<link rel="import" href="../../bower_components/secure-request/secure-request.html">
+
+<dom-module id="lrnapp-gitbook-canmerge">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .button-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+    <div class="wrapper">
+      <iron-ajax
+        auto
+        url="[[generateURL('api/canmerge', endPoint, csrfToken)]]"
+        handle-as="json"
+        last-response="{{canMerge}}"></iron-ajax>
+
+      <div class="button-wrapper">
+        <paper-button raised id="sync-button" disabled="{{_canSync(canMerge, syncing)}}">Sync Now</paper-button>
+        <paper-spinner active="{{syncing}}"></paper-spinner>
+      </div>
+
+      <iron-ajax
+        id="sync-request"
+        url="[[generateURL('api/sync', endPoint, csrfToken)]]"
+        handle-as="json"
+        on-response="_syncResponse"
+        loading="{{syncing}}"></iron-ajax>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'lrnapp-gitbook-canmerge',
+      behaviors: [SecureRequest.xhr],
+      properties: {
+        book: String,
+        canMerge: {
+          type: Boolean,
+          notify: true
+        },
+        syncing: {
+          type: Boolean,
+          value: false,
+          notify: true
+        }
+      },
+      listeners: {
+        'click': '_onClick'
+      },
+      observers: [
+        '_syncingChanged(syncing)'
+      ],
+      _syncingChanged: function(syncing) {
+      },
+      _canSync: function(canMerge, syncing) {
+        console.log(canMerge, syncing);
+        if (!canMerge || syncing) {
+          return true;
+        }
+        else {
+          return false;
+        }
+      },
+      _onClick: function(e) {
+        var root = this;
+        if (e.target.tagName === 'PAPER-BUTTON') {
+          var syncRequest = root.$$('#sync-request');
+          root.syncing = true;
+          this.fire('syncing', {syncing: true});
+          syncRequest.generateRequest();
+        }
+      },
+      _syncResponse: function(e) {
+        var root = this;
+        root.syncing = false;
+        this.fire('syncing', {syncing: false});
+      }
+    });
+  </script>
+</dom-module>

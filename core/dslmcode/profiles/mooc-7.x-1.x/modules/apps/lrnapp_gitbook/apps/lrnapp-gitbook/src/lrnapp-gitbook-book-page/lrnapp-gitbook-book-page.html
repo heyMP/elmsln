@@ -1,0 +1,82 @@
+<link rel="import" href="../lrnapp-gitbook-commits/lrnapp-gitbook-commits.html">
+<link rel="import" href="./lrnapp-gitbook-canmerge.html">
+<link rel="import" href="../lrnapp-gitbook-books/lrnapp-gitbook-books.html">
+<link rel="import" href="../../bower_components/secure-request/secure-request.html">
+
+<dom-module id="lrnapp-gitbook-book-page">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .actions {
+        width: 100%;
+        display: flex;
+        margin-top: 4vmin;
+        justify-content: center;
+      }
+      .title {
+        text-align: center;
+      }
+      paper-button[active] {
+        color: white;
+      }
+      paper-dialog-scrollable {
+        height: 50vmin;
+      }
+      .header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+    <app-route
+      route="{{route}}"
+      pattern="/:book"
+      data="{{data}}"
+      tail="{{tail}}">
+    </app-route>
+
+    <lrnapp-gitbook-books end-point="[[endPoint]]" csrf-token="[[csrfToken]]"></lrnapp-gitbook-books>
+    
+    <template is="dom-if" if="[[data.book]]">
+      <div class="header">
+        <h2 class="title">[[data.book]]</h2>
+        <lrnapp-gitbook-canmerge book="[[data.book]]" can-merge="{{canMerge}}" syncing="{{syncing}}" end-point="[[endPoint]]" csrf-token="[[csrfToken]]"></lrnapp-gitbook-canmerge>
+      </div>
+      <template is="dom-if" if="[[showCommits]]" restamp>
+        <paper-dialog-scrollable>
+          <lrnapp-gitbook-commits book="[[data.book]]" end-point="[[endPoint]]" csrf-token="[[csrfToken]]"></lrnapp-gitbook-commits>
+        </paper-dialog-scrollable>
+      </template>
+    </template>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'lrnapp-gitbook-book-page',
+      properties: {
+        route: {
+          type: Object
+        },
+        showCommits: {
+          type: Boolean,
+          value: true
+        }
+      },
+      listeners: {
+        'syncing': '_syncingEvent'
+      },
+      _syncingEvent: function(e) {
+        var root = this;
+        var syncing = e.detail.syncing;
+        if (syncing) {
+          root.showCommits = false;
+        }
+        if (!syncing) {
+          root.showCommits = true;
+        }
+      }
+    });
+  </script>
+</dom-module>
