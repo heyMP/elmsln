@@ -13,12 +13,12 @@
     <template is="dom-if" if="[[url]]">
       <iron-ajax
         auto
-        url="[[generateURL('api/commits', endPoint, csrfToken)]]"
+        url="[[url]]"
         handle-as="json"
         last-response="{{commits}}"></iron-ajax>
 
-        <div is="dom-if" if="[[commits]]">
-          <lrn-gitgraph orientation="vertical-reverse" commits="[[commits]]"></lrn-gitgraph>
+        <div is="dom-if" if="[[commits.data]]">
+          <lrn-gitgraph orientation="vertical-reverse" commits="[[commits.data]]"></lrn-gitgraph>
         </div>
     </template>
 
@@ -33,7 +33,7 @@
         },
         url: {
           type: String,
-          computed: 'computeUrl(book)'
+          computed: 'computeUrl(book, endpoint, token)'
         },
         commits: {
           type: Object
@@ -42,8 +42,8 @@
       observers: [
         '_bookChanged(book)'
       ],
-      computeUrl: function(book) {
-        return 'http://localhost:1337/api/books/' + book + '/commits';
+      computeUrl: function(book, end, token) {
+        return this.generateUrl('/api/' + book + '/commits', end, token);
       },
       _bookChanged: function(book, old) {
         var root = this;

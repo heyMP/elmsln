@@ -21,6 +21,10 @@
       "api/books/%/sync": {
         "callback": "_lrnapp_gitbook_sync_callback",
         "property": "source-path"
+      },
+      "api/books/%/commits": {
+        "callback": "_lrnapp_gitbook_commits_callback",
+        "property": "source-path"
       }
     }
   }

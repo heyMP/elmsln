@@ -22,20 +22,13 @@ function git_book_node_presave($node) {
  * Helper function to get a loaded repo object from node object
  */
 function _git_book_get_repo($node) {
+  libraries_load('gitphp');
   // build a path for this since its brand new and not hooked
   // up to anything currently
   $path = _git_book_get_path($node);
   if (is_dir($path)) {
-    try {
-      libraries_load('gitphp');
-      $repo = Git::open($path);
-      if ($repo) {
-        return $repo;
-      }
-    }
-    catch (Exception $e) {
-      return false;
-    }
+    $repo = Git::open($path);
+    return $repo;
   }
   return false;
 }
@@ -367,6 +360,28 @@ function _git_book_get_status($repo) {
 }
 
 /**
+ * Helper function to see if the repo is mergeable
+ */
+function _git_book_is_mergable($book) {
+  $repo = _git_book_get_repo($book);
+  $merge_branch = $book->field_git_merge_branch[LANGUAGE_NONE][0]['safe_value'];
+  if ($merge_branch) {
+    try {
+      @$repo->run('fetch --all');
+      $output = @$repo->run('merge --no-commit --no-ff origin/' . $merge_branch);
+      @$repo->run('merge --abort');
+      // if it doesn't return anything then it means it is mergable.
+      if ($output == '') {
+        return true;
+      }
+    }
+    catch (Exception $e) {
+    }
+  }
+  return false;
+}
+
+/**
  * Helper function to retreave a list of git books by machine name
  */
 function _git_book_get_books_by_name($name) {
@@ -382,4 +397,17 @@ function _git_book_get_books_by_name($name) {
   }
 
   return $books;
+}
+
+/**
+ * Helper function to retreave a single book by machine name
+ */
+function _git_book_get_book_by_name($name) {
+  $book = false;
+  $books = _git_book_get_books_by_name($name);
+  if ($books) {
+    // take the first one from the array
+    $book = array_shift(array_slice($books, 0, 1));
+  }
+  return $book;
 }

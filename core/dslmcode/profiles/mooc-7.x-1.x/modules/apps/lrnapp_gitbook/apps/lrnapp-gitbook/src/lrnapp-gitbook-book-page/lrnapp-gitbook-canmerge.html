@@ -23,7 +23,7 @@
       </template>
 
       <div class="button-wrapper">
-        <paper-button raised id="sync-button" disabled="{{_canSync(canMerge, syncing)}}">Sync Now</paper-button>
+        <paper-button raised id="sync-button" disabled="{{_canSync(canMerge.data, syncing)}}">Sync Now</paper-button>
         <paper-spinner active="{{syncing}}"></paper-spinner>
       </div>
 
@@ -34,8 +34,6 @@
         on-response="_syncResponse"
         loading="{{syncing}}"></iron-ajax>
     </div>
-
-    [[canMergeUrl]]
 
   </template>
   <script>
@@ -65,7 +63,7 @@
         '_syncingChanged(syncing)'
       ],
       _computeCanMergeUrl(book, end, token) {
-        return this.generateURL('api/'+ book +'/', end, token)
+        return this.generateURL('api/books/'+ book +'/canmerge', end, token);
       },
       _syncingChanged: function(syncing) {
       },
