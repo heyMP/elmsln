@@ -364,21 +364,91 @@ function _git_book_get_status($repo) {
  */
 function _git_book_is_mergable($book) {
   $repo = _git_book_get_repo($book);
+  $branch = $book->field_git_branch[LANGUAGE_NONE][0]['safe_value'];
   $merge_branch = $book->field_git_merge_branch[LANGUAGE_NONE][0]['safe_value'];
   if ($merge_branch) {
     try {
       @$repo->run('fetch --all');
-      $output = @$repo->run('merge --no-commit --no-ff origin/' . $merge_branch);
-      @$repo->run('merge --abort');
-      // if it doesn't return anything then it means it is mergable.
-      if ($output == '') {
-        return true;
-      }
     }
     catch (Exception $e) {
+      ddl($e->getMessage());
+    }
+    try {
+      $merge = @$repo->run('merge --no-commit --no-ff origin/' . $merge_branch);
+    }
+    catch (Exception $e) {
+      ddl($e->getMessage());
+    }
+    try {
+      $rev_list = @$repo->run('rev-list --left-right --count origin/master..origin/elmsln-outline');
+    }
+    catch (Exception $e) {
+      ddl($e->getMessage());
+    }
+    $rev_list = preg_replace('@[^a-z0-9-]+@','', strtolower($rev_list));
+    // if merge is empty then that means that it's mergable and if
+    // the rev list is not two zeros then it can be merged or pulled.
+    if ($merge == '') {
+      try {
+        @$repo->run('merge --abort');
+      }
+      catch (Exception $e) {
+        ddl($e->getMessage());
+      }
+    }
+    if ($merge == '' || $rev_list != '00') {
+      return true;
     }
   }
   return false;
+}
+
+/**
+ * Helper function to sync a book with the merge branch
+ */
+function _git_book_sync_book($book) {
+  $repo = _git_book_get_repo($book);
+  $branch = $book->field_git_branch[LANGUAGE_NONE][0]['safe_value'];
+  $merge_branch = $book->field_git_merge_branch[LANGUAGE_NONE][0]['safe_value'];
+  if ($branch && $merge_branch) {
+    try {
+      @$repo->merge('origin/' . $merge_branch);
+    }
+    catch (Exception $e) {
+      ddl('merge origin/merge ' . $e->getMessage());
+    }
+    try {
+      @$repo->push('origin', $branch);
+    }
+    catch (Exception $e) {
+      ddl('push origin: ' . $e->getMessage());
+    }
+    try {
+      @$repo->run('fetch origin ' + $branch + ':' + $merge_branch);
+    }
+    catch (Exception $e) {
+      ddl('fetch branch:merge ' . $e->getMessage());
+    }
+    try {
+      @$repo->push('origin', $merge_branch);
+    }
+    catch (Exception $e) {
+      ddl('push origin merge ' . $e->getMessage());
+    }
+  }
+  _git_book_parse_book($book);
+}
+
+function _git_book_parse_book($book) {
+  // load parsers
+  $path = _git_book_get_path($book);
+  if (is_dir($path)) {
+      $parsers = git_book_get_parsers();
+      if (isset($book->field_git_parser[LANGUAGE_NONE][0]['value']) && isset($parsers[$book->field_git_parser[LANGUAGE_NONE][0]['value']]) && isset($parsers[$book->field_git_parser[LANGUAGE_NONE][0]['value']]['path'])) {
+        // call anything that wants to parse this and turn it into nodes
+        $gitcontent = call_user_func($parsers[$book->field_git_parser[LANGUAGE_NONE][0]['value']]['parser'], $path, $book);
+      }
+  }
 }
 
 /**

@@ -29,7 +29,7 @@
 
       <iron-ajax
         id="sync-request"
-        url="[[generateURL('api/sync', endPoint, csrfToken)]]"
+        url="[[syncUrl]]"
         handle-as="json"
         on-response="_syncResponse"
         loading="{{syncing}}"></iron-ajax>
@@ -54,6 +54,10 @@
         canMergeUrl: {
           type: String,
           computed: '_computeCanMergeUrl(book, endPoint, csrfToken)'
+        },
+        syncUrl: {
+          type: String,
+          computed: '_computeSyncUrl(book, endPoint, csrfToken)'
         }
       },
       listeners: {
@@ -64,6 +68,9 @@
       ],
       _computeCanMergeUrl(book, end, token) {
         return this.generateURL('api/books/'+ book +'/canmerge', end, token);
+      },
+      _computeSyncUrl: function(book,end,token) {
+        return this.generateURL('api/books/'+ book +'/sync', end, token);
       },
       _syncingChanged: function(syncing) {
       },

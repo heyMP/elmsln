@@ -44,10 +44,17 @@ function _lrnapp_gitbook_commits_callback($machine_name, $app_route, $params, $a
 }
 
 function _lrnapp_gitbook_sync_callback($machine_name, $app_route, $params, $args) {
-  $return = array();
+  $return = false;
+  $book_name = $args[2];
+  if ($book_name) {
+    $book = _git_book_get_book_by_name($book_name);
+    if ($book) {
+      $return = _git_book_sync_book($book);
+    }
+  }
   return array(
     'status' => '200',
-    'data' => 'sync',
+    'data' => $return,
   );
 }
 
