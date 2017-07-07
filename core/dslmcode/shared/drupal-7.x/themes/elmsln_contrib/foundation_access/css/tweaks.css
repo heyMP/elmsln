@@ -2172,19 +2172,6 @@ div.read-time-wrapper div.chip i {
   line-height: inherit;
 }
 
-/* form usability */
-@media screen and (min-width: 85rem) {
-  form.node-form div.field-group-htabs-wrapper.group-settings {
-    position: absolute !important;
-    left: 100%;
-    width: calc(51vw - 58%);
-    top: 0;
-    max-width: 30em;
-    display: block;
-    height: 100%;
-    overflow-y: scroll;
-  }
-}
 form.node-form div.field-group-htabs-wrapper.group-settings legend + .fieldset-wrapper {
   padding: .2rem;
 }
