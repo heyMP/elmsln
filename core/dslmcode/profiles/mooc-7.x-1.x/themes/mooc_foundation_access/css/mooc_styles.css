@@ -172,6 +172,15 @@
   border-top: none;
 }
 
+@media screen and (min-width: 600px) {
+  #block-mooc-nav-block-mooc-nav-nav.block-mooc-nav-block-mooc-nav {
+    width: 250px;
+    width: 30vw;
+    max-width: 280px;
+  }
+}
+
+
 #block-mooc-nav-block-mooc-nav-nav ul{
   margin: 0;
   list-style: none;

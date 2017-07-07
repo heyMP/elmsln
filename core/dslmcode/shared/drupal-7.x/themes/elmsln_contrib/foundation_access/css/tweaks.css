@@ -340,8 +340,16 @@ body.page-node-edit.node-type-page .cke_focus .cke_top{
 
 .elmsln-content > * {
   margin: 1em;
+  margin: 1rem;
 }
 
+.elmsln-content-main {
+  width: 100%;
+}
+
+.elmsln-content--wrapped .elmsln-content-main {
+  max-width: 850px;
+}
 
 @media screen and (min-width: 600px) {
   .elmsln-content {
@@ -349,13 +357,6 @@ body.page-node-edit.node-type-page .cke_focus .cke_top{
     display: flex;
     justify-content: center;
   }
-
-  .elmsln-content--wrapped .elmsln-content-main {
-    max-width: 850px;
-  }
-}
-
-.elmsln-content-wrap {
 }
 
 /* ensure print view is better then defaults */
