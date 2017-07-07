@@ -338,8 +338,24 @@ body.page-node-edit.node-type-page .cke_focus .cke_top{
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
 }
 
+.elmsln-content > * {
+  margin: 1em;
+}
+
+
+@media screen and (min-width: 600px) {
+  .elmsln-content {
+    margin-top: 3.5rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .elmsln-content--wrapped .elmsln-content-main {
+    max-width: 850px;
+  }
+}
+
 .elmsln-content-wrap {
-  margin-top: 3.5rem;
 }
 
 /* ensure print view is better then defaults */
@@ -531,38 +547,8 @@ body.page-node-edit.node-type-page .cke_focus .cke_top{
   }
 }
 
-@media only screen and (min-width: 601px) {
-  .highlighted-block-area {
-    position: absolute;
-    right: 90%;
-    width: calc(55vw - 40%);
-    max-width: 20rem;
-    min-width: 10rem;
-    top: 0;
-  }
-}
-
-@media only screen and (min-width: 900px) {
-  .highlighted-block-area {
-    position: absolute;
-    right: 91%;
-    width: calc(55vw - 44%);
-    max-width: 20rem;
-    min-width: 10rem;
-    top: 0;
-  }
-}
-
 /* support shifting highlighted block region off to left column on big displays */
 @media screen and (min-width: 1280px) {
-  .highlighted-block-area {
-    position: absolute;
-    right: 92%;
-    width: calc(55vw - 46%);
-    max-width: 20rem;
-    min-width: 10rem;
-    top: 0;
-  }
   .views-exposed-form {
     position: absolute;
     right: 100%;
@@ -3091,3 +3077,4 @@ button.btn paper-button {
 div.MathJax_Display {
   display: inline!important;
 }
+

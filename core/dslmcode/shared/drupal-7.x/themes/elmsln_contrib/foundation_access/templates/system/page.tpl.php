@@ -106,11 +106,11 @@
             </div>
           </div>
           <?php if ($contentwrappers): ?>
-          <div class="elmsln-content-wrap row">
-            <div class="s12 push-m2 m10 push-l1 l11 col" role="main">
+            <div class="elmsln-content-wraper elmsln-content--wrapped">
+            <div class="elmsln-content" role="main">
           <?php else : ?>
-          <div class="elmsln-content-wrap">
-            <div role="main">
+            <div class="elmsln-content-wraper">
+            <div class="elmsln-content" role="main">
           <?php endif; ?>
               <?php if (!empty($page['highlighted'])): ?>
                 <div class="highlighted-block-area">
@@ -143,7 +143,7 @@
                   <?php endif; ?>
                 </div>
               <?php endif; ?>
-              <div class="push-s1 s10 col">
+              <div class="elmsln-content-main">
               <?php if ($title && arg(0) != 'node'): ?>
                 <?php print render($title_prefix); ?>
                 <h2 id="page-title" class="title"><?php print $title; ?></h2>
