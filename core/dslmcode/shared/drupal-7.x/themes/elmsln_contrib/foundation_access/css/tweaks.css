@@ -354,7 +354,11 @@ body.page-node-edit.node-type-page .cke_focus .cke_top{
 @media screen and (min-width: 600px) {
   .elmsln-content {
     margin-top: 3.5rem;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
   }
 }
