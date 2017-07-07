@@ -112,7 +112,7 @@
             <div class="elmsln-content-wraper">
             <div class="elmsln-content" role="main">
           <?php endif; ?>
-              <?php if (!empty($page['highlighted'])): ?>
+              <?php if (!empty($page['highlighted']) && $highlighted_visible): ?>
                 <div class="highlighted-block-area">
                   <?php print render($page['highlighted']); ?>
                 </div>

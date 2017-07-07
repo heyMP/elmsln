@@ -435,6 +435,12 @@ function foundation_access_preprocess_page(&$variables) {
       }
     }
   }
+  // Highlighted Block Visibility
+  $variables['highlighted_visible'] = TRUE;
+  // hide highlighted on node edit page
+  if ($menu_item['path'] == 'node/%/edit') {
+    $variables['highlighted_visible'] = FALSE;
+  }
 }
 
 /**
