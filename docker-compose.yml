@@ -1,0 +1,11 @@
+version: '2'
+services:
+  app:
+    build:
+      context: ./docker/app
+      dockerfile: Dockerfile
+    image: elmsln/elmsln
+    volumes:
+      - .:/var/www/elmsln
+    ports:
+      - "80:80"
