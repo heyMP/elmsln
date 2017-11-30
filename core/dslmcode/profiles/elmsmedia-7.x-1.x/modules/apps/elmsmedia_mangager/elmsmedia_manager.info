@@ -1,0 +1,3 @@
+name = ELMS Media Manager
+description = Polymer app to manager media assets.
+core = 7.x

@@ -1,0 +1,40 @@
+<link rel="import" href="../../bower_components/build/build/default/build.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+
+<dom-module id="elmsmedia-manager">
+  <template>
+    <style include="materializecss-styles"></style>
+    <style>
+      :host {
+        display: block;
+      }
+      paper-button {
+        padding: 0;
+        margin: 0;
+        min-width: 1rem;
+      }
+    </style>
+      <paper-card heading="<?php print $row->node_title;?>" image="<?php print $preview;?>">
+        <div class="card-content">
+          <!-- <?php print l('view', 'node/' . $row->nid . '/view_modes', array('attributes' => array('class' => 'accessible-red-text', 'icon' => 'image:remove-red-eye')));?>
+          <?php print l('edit', 'node/' . $row->nid . '/edit', array('attributes' => array('class' => 'accessible-red-text', 'icon' => 'editor:mode-edit')));?> -->
+        </div>
+      </paper-card>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'elmsmedia-manager',
+      properties: {
+      },
+      /
+        Simple way to convert from object to array.
+       /
+      _toArray: function(obj) {
+        return Object.keys(obj).map(function(key) {
+          return obj[key];
+        });
+      },
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,17 @@
+{
+  "lint": {
+    "rules": [
+      "polymer-2-hybrid"
+    ]
+  },
+  "builds" : [{
+    "js": {
+      "minify": true,
+      "compile": true
+    },
+    "css": {"minify": true},
+    "html":{"minify": true},
+    "insertPrefetchLinks": true,
+    "bundle": true
+  }]
+}

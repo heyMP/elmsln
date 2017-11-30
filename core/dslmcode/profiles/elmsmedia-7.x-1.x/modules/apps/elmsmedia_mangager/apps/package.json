@@ -1,0 +1,9 @@
+{
+  "name": "elmsmedia-manager",
+  "scripts": {
+    "lrn-dedup": "node bower-postinstall.js"
+  },
+  "devDependencies": {
+    "glob-fs": "^0.1.7"
+  }
+}
