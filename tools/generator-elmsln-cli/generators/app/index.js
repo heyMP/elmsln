@@ -11,6 +11,8 @@ module.exports = class extends Generator {
         name    : 'operation',
         message : 'What operation would you like to perform?',
         choices: [
+          'List Apps',
+          'List Shared Elements',
           'Clean Dependecies'
         ]
       }
@@ -20,6 +22,12 @@ module.exports = class extends Generator {
   }
 
   writing() {
+    if (this.answers.operation === 'List Apps') {
+      this.composeWith(require.resolve('../webcomponents:apps'));
+    }
+    if (this.answers.operation === 'List Shared Elements') {
+      this.composeWith(require.resolve('../webcomponents:elements'));
+    }
     if (this.answers.operation === 'Clean Dependecies') {
       this.composeWith(require.resolve('../webcomponents:clean'));
     }
