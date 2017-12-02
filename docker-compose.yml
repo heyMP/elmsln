@@ -1,8 +1,23 @@
 version: "3"
 
 services:
-  tools:
-    build: ./tools
+  devmachine:
+    build:
+      context: ./tools
+      dockerfile: Dockerfile-devmachine
   cli:
-    build: ./tools
+    build:
+      context: ./tools
+      dockerfile: Dockerfile-devmachine
     entrypoint: yo elmsln-cli
+    volumes:
+      - './core:/home/node/html/core'
+  generator-elmsln-cli:
+    build:
+      context: ./tools
+      dockerfile: Dockerfile-devmachine
+    entrypoint: yo elmsln-cli
+    volumes:
+      - '/home/node/html/tools/generator-elmsln-cli/node_modules'
+      - './tools/generator-elmsln-cli:/home/node/html/tools/generator-elmsln-cli'
+      - './core:/home/node/html/core'

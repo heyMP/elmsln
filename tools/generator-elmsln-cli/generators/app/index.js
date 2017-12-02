@@ -5,9 +5,23 @@ const yosay = require('yosay');
 
 module.exports = class extends Generator {
   prompting() {
-    // Have Yeoman greet the user.
-    this.log(yosay(
-      'Welcome to ELMS Learning Network Developer Tools.'
-    ));
+    return this.prompt([
+      {
+        type    : 'list',
+        name    : 'operation',
+        message : 'What operation would you like to perform?',
+        choices: [
+          'Clean Dependecies'
+        ]
+      }
+    ]).then((answers) => {
+      this.answers = answers;
+    });
+  }
+
+  writing() {
+    if (this.answers.operation === 'Clean Dependecies') {
+      this.composeWith(require.resolve('../webcomponents:clean'));
+    }
   }
 };
