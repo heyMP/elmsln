@@ -24,7 +24,7 @@ module.exports = class extends Generator {
         ]).then((answers) => {
           this.answers = answers
         })
-    })
+   })
   }
 
   getElements() {

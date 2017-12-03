@@ -5,6 +5,7 @@ FROM node:6.11.4
 RUN npm install -g polymer-cli@next
 RUN npm install -g bower
 RUN npm install -g yo
+RUN npm install -g vue-cli
 
 # Install ELMS:LN CLI
 WORKDIR /home/node/html/tools/generator-elmsln-cli

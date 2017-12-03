@@ -12,3 +12,5 @@ Benefits of this approach:
 This plugs into the way that elmsln-build.sh and the drupal-create-site scripts work with the server to ensure that things show up where they should.  The end result are drupal sites that drupal thinks are structured the same as any other site but are far easier to manage at scale.
 
 We are… Singularity
+
+asdf

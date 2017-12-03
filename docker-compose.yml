@@ -5,13 +5,28 @@ services:
     build:
       context: ./tools
       dockerfile: Dockerfile-devmachine
-  cli:
+    entrypoint: /bin/bash
+    volumes:
+      - './core:/home/node/html/core'
+
+  vagrant-sync:
+    build:
+      context: ./tools/vagrant-sync
+      dockerfile: Dockerfile-vagrant-sync
+    volumes:
+      - "./core:/data"
+      - "./vagrant/default/virtualbox/private_key:/root/.ssh/private_key"
+    environment:
+      - DESTINATION_HOST=vagrant@10.0.18.55
+      - DESTINATION_DIR=/home/vagrant/elmsln/core
+  
+  vuejs:
     build:
       context: ./tools
       dockerfile: Dockerfile-devmachine
-    entrypoint: yo elmsln-cli
     volumes:
-      - './core:/home/node/html/core'
+      - "./core:/home/node/html/core"
+
   generator-elmsln-cli:
     build:
       context: ./tools
