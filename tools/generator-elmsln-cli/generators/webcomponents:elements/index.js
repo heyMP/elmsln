@@ -1,10 +1,8 @@
 'use strict';
-const Generator = require('yeoman-generator');
-const chalk = require('chalk');
-const yosay = require('yosay');
-var glob = require("glob");
 
-module.exports = class extends Generator {
+require
+
+module.exports = class extends kk {
   initializing() {
   }
 
@@ -25,15 +23,5 @@ module.exports = class extends Generator {
           this.answers = answers
         })
    })
-  }
-
-  getElements() {
-    // Get a list of all bower imports .
-    return new Promise((resolve, reject) => {
-      glob(this.destinationPath('core/webcomponents/elements/*'), (err, value) => {
-        if (err) reject(err);
-        resolve(value);
-      });
-    });
   }
 };

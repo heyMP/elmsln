@@ -1,9 +1,7 @@
 'use strict';
-const Generator = require('yeoman-generator');
-const chalk = require('chalk');
-const yosay = require('yosay');
+const ElmsGenerator = require('../ElmsGenerator');
 
-module.exports = class extends Generator {
+module.exports = class extends ElmsGenerator {
   prompting() {
     return this.prompt([
       {

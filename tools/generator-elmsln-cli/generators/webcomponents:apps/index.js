@@ -1,12 +1,7 @@
 'use strict';
-const Generator = require('yeoman-generator');
-const chalk = require('chalk');
-const yosay = require('yosay');
-var glob = require("glob");
+const ElmsGenerator = require('../ElmsGenerator');
 
-module.exports = class extends Generator {
-  initializing() {
-  }
+module.exports = class extends ElmsGenerator {
 
   prompting() {
     // get the list of apps 
@@ -28,15 +23,5 @@ module.exports = class extends Generator {
   }
 
   writing() {
-  }
-
-  getApps() {
-    // Get a list of all bower imports .
-    return new Promise((resolve, reject) => {
-      glob(this.destinationPath('core/webcomponents/apps/*'), (err, value) => {
-        if (err) reject(err);
-        resolve(value);
-      });
-    });
   }
 };
