@@ -9,3 +9,4 @@ services:
     volumes:
       - './core:/home/node/html/core'
       - './tools:/home/node/html/tools'
+      - '/home/node/html/tools/generator-elmsln-cli/node_modules'

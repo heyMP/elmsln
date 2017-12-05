@@ -1,8 +1,8 @@
 'use strict';
 
-require
+const ElmsGenerator = require('../ElmsGenerator');
 
-module.exports = class extends kk {
+module.exports = class extends ElmsGenerator {
   initializing() {
   }
 

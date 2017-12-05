@@ -9,7 +9,7 @@ module.exports = class extends ElmsGenerator {
         name    : 'operation',
         message : 'What operation would you like to perform?',
         choices: [
-          'List Apps',
+          'Apps',
           'List Shared Elements',
           'Clean Dependecies'
         ]
@@ -20,6 +20,9 @@ module.exports = class extends ElmsGenerator {
   }
 
   writing() {
+    if (this.answers.operation === 'List Apps') {
+      this.composeWith(require.resolve('../webcomponents:apps'));
+    }
     if (this.answers.operation === 'List Apps') {
       this.composeWith(require.resolve('../webcomponents:apps'));
     }

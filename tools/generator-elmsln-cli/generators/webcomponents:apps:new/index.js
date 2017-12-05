@@ -7,11 +7,10 @@ module.exports = class extends ElmsGenerator {
     return this.prompt([
       {
         type: 'list',
-        name: 'operation',
+        name: 'type',
         message: 'What opperation would you like to perform?',
         choices: [
-          'Create new app',
-          'List Apps',
+          'Polymer App'
         ]
       }
     ]).then((answers) => {
@@ -21,10 +20,6 @@ module.exports = class extends ElmsGenerator {
 
   writing() {
     if (this.answers.operation === 'Create new app') {
-      this.composeWith(require.resolve('../webcomponents:apps:new'));
-    }
-    if (this.answers.operation === 'List Apps') {
-      this.composeWith(require.resolve('../webcomponents:apps:list'));
     }
   }
 };
