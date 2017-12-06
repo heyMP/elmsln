@@ -52,16 +52,8 @@ module.exports = class extends Generator {
     return cleanFiles;
   }
 
-  case(string, type) {
-    // if no type was passed then default to camel
-    if (type === null) type = 'camel';
-    // camel case
-    if (type === 'camel') {
-      return Case.camel(string)
-    }
-    // kebab case
-    if (type === 'kebab') {
-      return Case.kebab(string)
-    }
+  // Access the Case library
+  case() {
+    return Case;
   }
 };

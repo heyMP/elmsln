@@ -17,21 +17,44 @@ module.exports = class extends ElmsGenerator {
     ];
 
     return this.prompt(prompts).then(props => {
-      props = Object.assign(props, { name: this.case(props.name, 'kebab') });
+      props = Object.assign(props, {
+        name: this.case().kebab(props.name),
+        nameSnakeFormat: this.case().kebab(props.name)
+      });
       this.answers = props;
     });
   }
 
   writing() {
+    const name = this.answers.name;
+    const nameSnakeFormat = this.answers.nameSnakeFormat;
+    const destinationPath = this.destinationPath(`${this.APPS_PATH()}/${name}`);
+    // copy over all files but the dynamic ones
     this.fs.copyTpl(
-      this.templatePath('_name'),
-      this.destinationPath(`${this.APPS_PATH()}/${this.answers.name}`),
+      `${this.templatePath('_name')}/**/!(_)*`,
+      destinationPath,
+      this.answers
+    );
+    this.fs.copyTpl(
+      this.templatePath('_name/test/_name/_name_test.html'),
+      `${destinationPath}/src/${name}/${name}_test.html`,
+      this.answers
+    );
+    this.fs.copyTpl(
+      this.templatePath('_name/src/_name/_name.html'),
+      `${destinationPath}/test/${name}/${name}.html`,
+      this.answers
+    );
+    this.fs.copyTpl(
+      this.templatePath('_name/_nameSnakeFormat.php'),
+      `${destinationPath}/${nameSnakeFormat}.php`,
       this.answers
     );
   }
 
   installing() {
-    const destinationPath = this.destinationPath(`${this.APPS_PATH()}/${this.answers.name}`);
+    const name = this.answers.name;
+    const destinationPath = this.destinationPath(`${this.APPS_PATH()}/${name}`);
     this.runInstall('bower', destinationPath);
   }
 };
