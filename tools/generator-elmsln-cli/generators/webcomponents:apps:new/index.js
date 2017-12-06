@@ -19,7 +19,7 @@ module.exports = class extends ElmsGenerator {
   }
 
   writing() {
-    if (this.answers.operation === 'Polymer') {
+    if (this.answers.type === 'Polymer') {
       this.composeWith(require.resolve('../webcomponents:apps:new:polymer'));
     }
   }

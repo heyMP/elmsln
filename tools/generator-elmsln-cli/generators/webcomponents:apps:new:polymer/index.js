@@ -8,6 +8,11 @@ module.exports = class extends ElmsGenerator {
         type: 'input',
         name: 'name',
         message: 'What is the name of your app?',
+      },
+      {
+        type: 'input',
+        name: 'description',
+        message: 'What is the description of your app?',
       }
     ];
 
@@ -18,12 +23,15 @@ module.exports = class extends ElmsGenerator {
   }
 
   writing() {
-    const APPS_PATH = this.APPS_PATH;
     this.fs.copyTpl(
       this.templatePath('_name'),
-      this.destinationPath(`${APPS_PATH}/${this.answers.name}`),
-      this.props
+      this.destinationPath(`${this.APPS_PATH()}/${this.answers.name}`),
+      this.answers
     );
   }
-  
+
+  installing() {
+    const destinationPath = this.destinationPath(`${this.APPS_PATH()}/${this.answers.name}`);
+    this.runInstall('bower', destinationPath);
+  }
 };

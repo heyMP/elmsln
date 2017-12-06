@@ -1,6 +1,6 @@
 # \<%= name %>\>
 
-<%= description >
+<%= description %>
 
 ## Install the Polymer-CLI
 
