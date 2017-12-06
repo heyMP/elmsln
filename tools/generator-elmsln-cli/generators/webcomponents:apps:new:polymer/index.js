@@ -55,6 +55,7 @@ module.exports = class extends ElmsGenerator {
   installing() {
     const name = this.answers.name;
     const destinationPath = this.destinationPath(`${this.APPS_PATH()}/${name}`);
+    // Install bower dependencies in new app.
     this.runInstall('bower', destinationPath);
   }
 };
