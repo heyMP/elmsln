@@ -20,10 +20,7 @@ module.exports = class extends ElmsGenerator {
   }
 
   writing() {
-    if (this.answers.operation === 'List Apps') {
-      this.composeWith(require.resolve('../webcomponents:apps'));
-    }
-    if (this.answers.operation === 'List Apps') {
+    if (this.answers.operation === 'Apps') {
       this.composeWith(require.resolve('../webcomponents:apps'));
     }
     if (this.answers.operation === 'List Shared Elements') {

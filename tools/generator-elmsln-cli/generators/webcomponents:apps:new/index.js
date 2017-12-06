@@ -8,9 +8,9 @@ module.exports = class extends ElmsGenerator {
       {
         type: 'list',
         name: 'type',
-        message: 'What opperation would you like to perform?',
+        message: 'What type of app would you like to create?',
         choices: [
-          'Polymer App'
+          'Polymer'
         ]
       }
     ]).then((answers) => {
@@ -19,7 +19,8 @@ module.exports = class extends ElmsGenerator {
   }
 
   writing() {
-    if (this.answers.operation === 'Create new app') {
+    if (this.answers.operation === 'Polymer') {
+      this.composeWith(require.resolve('../webcomponents:apps:new:polymer'));
     }
   }
 };
