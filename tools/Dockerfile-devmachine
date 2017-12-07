@@ -1,37 +1,26 @@
 FROM node:6.11.4
 
-# Install ZSH
-# WORKDIR /home/node
-# RUN git clone https://github.com/heyMP/dotfiles.git --recursive
-# RUN apt-get update
-# RUN apt install zsh -y
-# RUN apt install vim -y
-# RUN wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh
-# RUN bash install.sh
-# RUN rm install.sh
-# WORKDIR /home/node/dotfiles
-
-# # Sane defaults for setting up users
-# # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#global-npm-dependencies
+# Sane defaults for setting up users
+# https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#global-npm-dependencies
 RUN npm install -g polymer-cli@next
 RUN npm install -g bower
 RUN npm install -g yo
 RUN npm install -g vue-cli
 
-# # Install ELMS:LN CLI
+# Install ELMS:LN CLI
 WORKDIR /home/node/html/tools/generator-elmsln-cli
 COPY ./generator-elmsln-cli/package.json package.json
 RUN npm install
 COPY ./generator-elmsln-cli .
 RUN npm link
 
-# # Copy Yeoman config
+# Copy Yeoman config
 WORKDIR /home/node
 COPY .config .config
 
-# # Clean up perms and switch to node users
+# Clean up perms and switch to node users
 RUN chown -R node:node .
 USER node
 
-# # Set Working Directory
+# Set Working Directory
 WORKDIR /home/node/html

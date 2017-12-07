@@ -11,10 +11,11 @@ module.exports = class extends ElmsGenerator {
     .then((apps) => {
       return this.prompt([
         {
-          type: 'checkbox',
-          name: 'operation',
+          type: 'list',
+          name: 'app',
           message: 'Select the app you would like to perform an operation on.',
-          choices: apps
+          choices: apps,
+          pageSize: 40
         }
         ]).then((answers) => {
           this.answers = answers
@@ -23,5 +24,6 @@ module.exports = class extends ElmsGenerator {
   }
 
   writing() {
+    this.composeWith(require.resolve('../webcomponents:serve', this.options));
   }
 };

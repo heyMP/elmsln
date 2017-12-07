@@ -17,7 +17,8 @@ module.exports = class extends ElmsGenerator {
           type: 'list',
           name: 'operation',
           message: 'Select the elements.',
-          choices: elements
+          choices: elements,
+          pageSize: 40
         }
         ]).then((answers) => {
           this.answers = answers

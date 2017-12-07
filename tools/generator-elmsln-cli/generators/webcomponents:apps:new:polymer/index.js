@@ -37,12 +37,12 @@ module.exports = class extends ElmsGenerator {
     );
     this.fs.copyTpl(
       this.templatePath('_name/test/_name/_name_test.html'),
-      `${destinationPath}/src/${name}/${name}_test.html`,
+      `${destinationPath}/test/${name}/${name}_test.html`,
       this.answers
     );
     this.fs.copyTpl(
       this.templatePath('_name/src/_name/_name.html'),
-      `${destinationPath}/test/${name}/${name}.html`,
+      `${destinationPath}/src/${name}/${name}.html`,
       this.answers
     );
     this.fs.copyTpl(
