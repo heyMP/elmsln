@@ -24,6 +24,7 @@ module.exports = class extends ElmsGenerator {
   }
 
   writing() {
-    this.composeWith(require.resolve('../webcomponents:serve', this.options));
+    this.env.path = this.answers.app;
+    this.composeWith(require.resolve('../webcomponents:serve'));
   }
 };
