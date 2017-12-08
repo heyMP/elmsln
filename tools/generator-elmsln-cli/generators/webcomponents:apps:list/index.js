@@ -6,8 +6,17 @@ module.exports = class extends ElmsGenerator {
   prompting() {
     // get the list of apps 
     return this.getApps()
-    // trim the path to only show the app name
-    .then(apps => apps.map(app => app.slice(40)))
+    .then(apps => apps.map(app => {
+      const appsPathlist =  this.__appsPathlist || {};
+      const path = app;
+      const shortname = app.slice(40)
+      const appPathItem = {};
+      appPathItem[shortname] = path;
+      // store the original path for later
+      this.__appsPathlist = Object.assign(appsPathlist, appPathItem);
+      // trim the path to only show the app name
+      return app.slice(40)
+    }))
     .then((apps) => {
       return this.prompt([
         {
@@ -24,7 +33,9 @@ module.exports = class extends ElmsGenerator {
   }
 
   writing() {
-    this.env.path = this.answers.app;
-    this.composeWith(require.resolve('../webcomponents:serve'));
+    if (this.env.operation === 'serve') {
+      this.env.path = this.__appsPathlist[this.answers.app];
+      this.composeWith(require.resolve('../webcomponents:serve'));
+    }
   }
 };

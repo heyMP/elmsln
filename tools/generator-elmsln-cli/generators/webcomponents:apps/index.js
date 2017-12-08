@@ -12,6 +12,7 @@ module.exports = class extends ElmsGenerator {
         choices: [
           'Create new app',
           'List Apps',
+          'Serve App',
         ]
       }
     ]).then((answers) => {
@@ -24,6 +25,10 @@ module.exports = class extends ElmsGenerator {
       this.composeWith(require.resolve('../webcomponents:apps:new'));
     }
     if (this.answers.operation === 'List Apps') {
+      this.composeWith(require.resolve('../webcomponents:apps:list'));
+    }
+    if (this.answers.operation === 'Serve App') {
+      this.env.operation = 'serve';
       this.composeWith(require.resolve('../webcomponents:apps:list'));
     }
   }
