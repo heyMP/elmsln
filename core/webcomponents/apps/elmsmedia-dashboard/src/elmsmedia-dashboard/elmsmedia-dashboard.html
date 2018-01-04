@@ -126,6 +126,12 @@
         this.addEventListener('remove-filter', (e) => {
           this.removeFilter(e.detail.path, e.detail.propValue);
         });
+
+        this.$$('hax-source').addEventListener('item-selected', e => {
+          const selectedItem = e.detail;
+          const url = `/node/${selectedItem.id}`
+          window.location = url
+        })
       }
     });
   </script>
