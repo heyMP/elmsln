@@ -98,7 +98,7 @@
 
     <iron-list grid id="itemlist" items="[[media]]" as="item" selection-enabled on-selected-item-changed="_itemSelected">
       <template>
-        <hax-source-list-item gizmo-type="[[item.gizmoType]]" url="[[item.url]]" id="[[item.id]]" image="[[item.image]]" date="[[item.date]]" title="[[item.title]]" description="[[item.description]]"></hax-source-list-item>
+        <hax-source-list-item gizmo-type="[[item.gizmoType]]" url="[[item.url]]" id="[[item.id]]" image="[[item.image]]" date="[[item.date]]" title="[[item.title]]" description="[[item.description]]" updated="[[item.updated]]" author="[[item.author]]"></hax-source-list-item>
       </template>
     </iron-list>
 
@@ -197,6 +197,8 @@
             "title": "meta.title",
             "description": "meta.description",
             "image": "meta.thumbnail",
+            "author": "meta.author",
+            "updated": "meta.updated",
             "customGizmoType": "meta.type",
           },
         },
@@ -222,8 +224,7 @@
          */
         media: {
           type: Array,
-          value: [],
-          notify: true
+          value: []
         }
       },
       observers: ['_setBasicAuth(user, pass)'],
@@ -317,6 +318,8 @@
                 'description': this._resolveObjectPath(map.description, data[i]),
                 'image' : this._resolveObjectPath(map.image, data[i]),
                 'gizmoType' : map.gizmoType,
+                'updated': this._resolveObjectPath(map.updated, data[i]),
+                'author': this._resolveObjectPath(map.author, data[i]),
               };
               // gizmo type is also supported in the mapping element itself
               // Think an asset management backend as opposed to a specific
@@ -360,6 +363,8 @@
         if (selectedItem === null) return;
         // if there is a selected item then we'll fire the event up.
         this.fire('item-selected', selectedItem);
+        // if there is now Polymer.HaxStore then bail
+        if (!Polymer.HaxStore) return;
         // we are going to pull off the url and gizmoType to start
         // the integration with HAX
         let url = selectedItem.url;
