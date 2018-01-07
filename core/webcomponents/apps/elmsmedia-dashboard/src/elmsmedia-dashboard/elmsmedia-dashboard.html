@@ -45,7 +45,7 @@
       </div>
     </paper-dialog>
 
-    <hax-source id="haxSource" auto query-param="title" request-end-point="[[requestEndPoint]]" request-params="{{queryParams}}" media-list="{{__mediaList}}" media="{{__media}}" response-map='{
+    <hax-source id="haxSource" auto query-param="title" request-end-point="[[requestEndPoint]]" request-params="{{queryParams}}" response-map='{
       "root": "list",
       "gizmoType": "video",
       "url": "http://media.elmsln.local/entity_iframe/node/",
@@ -70,48 +70,7 @@
           type: Object,
           value: {},
         },
-        /**
-         * Raw Response from elmsmedia endpoint.
-         */
-        __media: {
-          type: Array,
-          value: [],
-          observer: '__mediaChanged'
-        },
-        /**
-         * Media object, normalized.
-         */
-        __mediaList: {
-          type: Array,
-          value: [],
-          observer: '__mediaListChanged'
-        },
       },
-      __mediaChanged: function (newMedia, oldMedia) {
-        // quick dirty check
-        if (_.isEqual(newMedia, oldMedia)) return;
-
-      },
-      __mediaListChanged: function (newList, oldList) {
-        // quick dirty check
-        if (_.isEqual(newList, oldList)) return;
-        // if no list then bail
-        if (!newList.list) return;
-
-        const modifiedList = newList.list.map(item => {
-          console.log(item);
-          // get the last changed date
-          const changed = item.meta.changed;
-          if (changed) {
-            // format to last updated
-            const date = new Date(changed);
-            const formatedDate = formatedDate(date);
-          }
-          // _.set(item, 'display.lastUpdated', ite);
-        });
-        this.media = modifiedList;
-      },
-
       observers: [
         '_routeChanged(route, endPoint)'
       ],
@@ -187,8 +146,12 @@
 
         this.$$('hax-source').addEventListener('item-selected', e => {
           const selectedItem = e.detail;
-          const url = `/node/${selectedItem.id}`
-          window.location = url
+          // we need to find the originalItem and not HAX's selected item.
+          const originalItem = this.__mediaList.list.find(i => Number(i.id) === Number(selectedItem.id));
+          // get the items url.
+          const url = '/' + _.get(originalItem, 'attributes.url');
+          // go to that page.
+          window.location = url;
         })
       }
     });

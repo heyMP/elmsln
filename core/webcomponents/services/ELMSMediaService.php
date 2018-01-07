@@ -138,6 +138,7 @@ class ELMSMediaService extends ELMSRestService {
       $encoded_item->attributes = new stdClass();
       $encoded_item->attributes->title = $item->title;
       $encoded_item->attributes->body = $item->field_project_description[LANGUAGE_NONE][0]['safe_value'];
+      $encoded_item->attributes->url = drupal_get_path_alias('node/' . $item->nid);
 
       // Images
       $encoded_item->attributes->images = NULL;
