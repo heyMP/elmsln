@@ -116,10 +116,10 @@
       <h3 class="loading-text">Loading content..</h3>
     </div>
 
-    <iron-list grid id="itemlist" items="[[media]]" as="item">
+    <iron-list grid id="itemlist" items="[[media]]" as="item" selection-enabled on-selected-item-changed="_itemSelected">
       <template>
-        <paper-button data-gizmo-type$="[[item.gizmoType]]" data-value$="[[item.url]]" data-id$="[[item.id]]" on-tap="_itemSelected" class="item-wrapper">
-          <paper-card data-gizmo-type$="[[item.gizmoType]]" data-value$="[[item.url]]" data-id$="[[item.id]]" image="[[item.image]]">
+        <paper-button data-id$="[[item.id]]" class="item-wrapper">
+          <paper-card data-id$="[[item.id]]" image="[[item.image]]">
             <div class="card-content" style="height:5em;overflow:auto;">
               <p>[[item.title]]</p>
               <p hidden>[[item.description]]</p>
@@ -376,13 +376,17 @@
        * Handle media item selected.
        */
       _itemSelected: function(e) {
-        // user clicked something, normalize this
-        var normalizedEvent = Polymer.dom(e);
-        var local = normalizedEvent.localTarget;
-        var detail = {};
+        // the selected item should be in detail.value
+        // if not, then there is no selected item at this time
+        var selectedItem = e.detail.value;
+        // if there is no selected item then we are going to bail.
+        if (selectedItem === null) return;
+        // if there is a selected item then we'll fire the event up.
+        this.fire('item-selected', selectedItem);
+        
         // url is the data-value on here
-        let url = local.getAttribute('data-value');
-        let gizmoType = local.getAttribute('data-gizmo-type');
+        let url = selectedItem.url;
+        let gizmoType = selectedItem.gizmoType;
         // sanity check
         if (url !== null && url !== '') {
           // @todo add support for other things from the source
