@@ -111,8 +111,26 @@
         });
         this.media = modifiedList;
       },
+
+      observers: [
+        '_routeChanged(route, endPoint)'
+      ],
       _computeRequestEndPoint: function (endPoint, csrfToken) {
         return `${endPoint}/api/data?token=${csrfToken}`
+      },
+      // If the current route is outside the scope of our app
+      // then allow the website to break out of the single page
+      // application routing
+      _routeChanged: function (route, endPoint) {
+        if (typeof route.path === 'string') {
+          if (typeof endPoint === 'string') {
+            if (route.path.startsWith(endPoint)) {
+              return;
+            }
+          }
+          // reload the page which since route changed will load that page
+          window.location.reload();
+        }
       },
       /**
        * Listen for filter changes and reset the page count
@@ -166,6 +184,12 @@
         this.addEventListener('remove-filter', (e) => {
           this.removeFilter(e.detail.path, e.detail.propValue);
         });
+
+        this.$$('hax-source').addEventListener('item-selected', e => {
+          const selectedItem = e.detail;
+          const url = `/node/${selectedItem.id}`
+          window.location = url
+        })
       }
     });
   </script>

@@ -96,7 +96,7 @@
       <h3 class="loading-text">Loading content..</h3>
     </div>
 
-    <iron-list grid id="itemlist" items="[[media]]" as="item">
+    <iron-list grid id="itemlist" items="[[media]]" as="item" selection-enabled on-selected-item-changed="_itemSelected">
       <template>
         <hax-source-list-item gizmo-type="[[item.gizmoType]]" url="[[item.url]]" id="[[item.id]]" image="[[item.image]]" on-tap="_itemSelected" date="[[item.date]]" title="[[item.title]]" description="[[item.description]]"></hax-source-list-item>
       </template>
@@ -351,13 +351,17 @@
        * Handle media item selected.
        */
       _itemSelected: function(e) {
-        // user clicked something, normalize this
-        var normalizedEvent = Polymer.dom(e);
-        var local = normalizedEvent.localTarget;
-        var detail = {};
+        // the selected item should be in detail.value
+        // if not, then there is no selected item at this time
+        var selectedItem = e.detail.value;
+        // if there is no selected item then we are going to bail.
+        if (selectedItem === null) return;
+        // if there is a selected item then we'll fire the event up.
+        this.fire('item-selected', selectedItem);
+        
         // url is the data-value on here
-        let url = local.getAttribute('url');
-        let gizmoType = local.getAttribute('data-gizmo-type');
+        let url = selectedItem.url;
+        let gizmoType = selectedItem.gizmoType;
         // sanity check
         if (url !== null && url !== '') {
           // @todo add support for other things from the source
