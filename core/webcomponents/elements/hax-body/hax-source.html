@@ -98,7 +98,7 @@
 
     <iron-list grid id="itemlist" items="[[media]]" as="item" selection-enabled on-selected-item-changed="_itemSelected">
       <template>
-        <hax-source-list-item gizmo-type="[[item.gizmoType]]" url="[[item.url]]" id="[[item.id]]" image="[[item.image]]" on-tap="_itemSelected" date="[[item.date]]" title="[[item.title]]" description="[[item.description]]"></hax-source-list-item>
+        <hax-source-list-item gizmo-type="[[item.gizmoType]]" url="[[item.url]]" id="[[item.id]]" image="[[item.image]]" date="[[item.date]]" title="[[item.title]]" description="[[item.description]]"></hax-source-list-item>
       </template>
     </iron-list>
 
@@ -348,7 +348,9 @@
         }, 500))
       },
       /**
-       * Handle media item selected.
+       * Handle media item selected sent from the iron-list
+       * selected item. iron-list selected item is either
+       * null or a selected object.
        */
       _itemSelected: function(e) {
         // the selected item should be in detail.value
@@ -358,8 +360,8 @@
         if (selectedItem === null) return;
         // if there is a selected item then we'll fire the event up.
         this.fire('item-selected', selectedItem);
-        
-        // url is the data-value on here
+        // we are going to pull off the url and gizmoType to start
+        // the integration with HAX
         let url = selectedItem.url;
         let gizmoType = selectedItem.gizmoType;
         // sanity check
