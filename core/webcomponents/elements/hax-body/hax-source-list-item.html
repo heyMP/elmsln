@@ -1,0 +1,93 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="hax-source-list-item-metadata.html">
+
+<dom-module id="hax-source-list-item">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      #wrapper {
+        @apply --hax-source-list-item-wrapper;
+      }
+      paper-button.item-wrapper {
+        margin: 0;
+        padding: 0;
+      }
+      paper-card {
+        padding: 0;
+        margin: 0;
+        width: 15em;
+        font-size: .8em;
+        --paper-card-header: {
+          max-height: 10em;
+        }
+      }
+      @media screen and (min-width: 800px) {
+        paper-card {
+          font-size: .85em;
+        }
+      }
+      .card-content {
+        padding: .1em;
+        text-transform: none;
+      }
+      .card-content p {
+        padding: 0;
+        margin: 0;
+      }
+      #title {
+        font-size: 1em;
+      }
+    </style>
+
+    <div id="wrapper">
+      <paper-button data-gizmo-type$="[[gizmoType]]" data-value$="[[url]]" data-id$="[[id]]" class="item-wrapper">
+        <paper-card data-gizmo-type$="[[gizmoType]]" data-value$="[[url]]" data-id$="[[id]]" image="[[image]]">
+          <div class="card-content" style="height:5em;overflow:auto;">
+            <h3 id="title">[[title]]</h3>
+            <p hidden>[[description]]</p>
+            <hax-source-list-item-metadata label="Updated">11/12/15</hax-source-list-item-metadata>
+            <hax-source-list-item-metadata label="Author">heyMP</hax-source-list-item-metadata>
+          </div>
+        </paper-card>
+      </paper-button>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'hax-source-list-item',
+      properties: {
+        id: {
+          type: String,
+          value: ''
+        },
+        title: {
+          type: String,
+          value: ''
+        },
+        description: {
+          type: String,
+          value: ''
+        },
+        image: {
+          type: String,
+          value: ''
+        },
+        url: {
+          type: String,
+          value: ''
+        },
+        gizmoType: {
+          type: String,
+          value: ''
+        },
+        updated: {
+          type: String,
+          value: ''
+        },
+      }
+    });
+  </script>
+</dom-module>

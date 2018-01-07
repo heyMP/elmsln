@@ -154,11 +154,25 @@ class ELMSMediaService extends ELMSRestService {
           $encoded_item->attributes->images[] = $file_output;
         }
       }
+      // Placeholder thumbnails
+      // if (!isset($encoded_item->attributes->images)) {
+      //   $encoded_item->attributes->fallback_image = 'https://via.placeholder.com/200?text=H5P';
+      // }
+
+      // Assign Display image
       $images = $encoded_item->attributes->images;
       if ($images) {
         $image = array_pop($images);
         $encoded_item->display = new stdClass();
         $encoded_item->display->image = $image['url'];
+      }
+      else if (isset($encoded_item->attributes->fallback_image)) {
+        $encoded_item->display = new stdClass();
+        $encoded_item->display->image = $encoded_item->attributes->fallback_image;
+      }
+      else {
+        $encoded_item->display = new stdClass();
+        $encoded_item->display->image = t('https://via.placeholder.com/200?text=!type', array('!type' => $item->type));
       }
 
       // Meta Info
