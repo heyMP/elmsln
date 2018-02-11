@@ -139,6 +139,7 @@ function foundation_access_preprocess_html(&$variables) {
   $variables['system_icon'] = $settings['icon'];
   $variables['lmsless_classes'] = _cis_lmsless_get_distro_classes(elmsln_core_get_profile_key());
   $variables['system_title'] = (isset($settings['default_title']) ? $settings['default_title'] : $variables['distro']);
+  $variables['course'] = _cis_connector_course_context();
   $css = _foundation_access_contextual_colors($variables['lmsless_classes']);
   $variables['theme_path'] = base_path() . drupal_get_path('theme', 'foundation_access');
 
@@ -1179,6 +1180,10 @@ function foundation_access_menu_link(&$variables) {
       $element['#localized_options']['query']['elmsln_course'] = _cis_connector_course_context();
       $element['#localized_options']['query']['elmsln_section'] = _cis_connector_section_context();
     }
+    // set destination to bounce back here when done
+    if (_cis_connector_system_type() != 'service') {
+      $element['#localized_options']['query']['destination'] = current_path();
+    }
     // load up a map of icons and color associations
     $icon_map = _elmsln_core_icon_map();
     $icon = str_replace(' ', '_', drupal_strtolower($title));
@@ -1409,13 +1414,6 @@ function foundation_access_html_head_alter(&$head_elements) {
  * Print breadcrumbs as a list, with separators.
  */
 function foundation_access_breadcrumb($variables) {
-}
-
-/**
- * Implements hook_preprocess().
- */
-function foundation_access_preprocess_cis_dashbord(&$variables, $hook) {
-  $variables['theme_hook_suggestions'][] = 'cis_dashboard';
 }
 
 /**

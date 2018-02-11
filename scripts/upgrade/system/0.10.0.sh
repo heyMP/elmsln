@@ -24,6 +24,11 @@ mkdir $configsdir/stacks/_toplevel/user
 # move to user dir so our symlink is correct
 cd $configsdir/stacks/_toplevel/user
 ln -s ../../../core/webcomponents webcomponents
+# api setup
+mkdir $configsdir/stacks/api
+# try and install docker on Ubuntu / CentOS based targets
+sudo apt-get -y install docker docker.io docker-compose
+sudo yum -y install docker docker-io docker-compose
 # move back to origin and invoke security repair
 cd $DIR
 bash ../../utilities/harden-security.sh
