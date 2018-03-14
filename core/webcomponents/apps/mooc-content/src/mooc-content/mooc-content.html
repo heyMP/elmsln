@@ -9,6 +9,8 @@
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../bower_components/responsive-grid/responsive-grid-row.html">
 <link rel="import" href="../../bower_components/materializecss-styles/materializecss-styles.html">
+<link rel="import" href="mooc-mapmenu.html">
+
 <!--
 `lrnapp-book`
 A LRN element
@@ -94,9 +96,10 @@ A LRN element
           <div class="elmsln-content-wrap" role="main">
           <responsive-grid-row gutter="4">
             <responsive-grid-col xl="3" lg="3" md="3" sm="4" xs="12">
+              <mooc-mapmenu id="outlinemenu" items="[[outlineData.data.outline]]"></mooc-mapmenu>
               <section id="block-mooc-nav-block-mooc-nav-nav" class="mooc-nav-block-left block block-mooc-nav-block contextual-links-region block-mooc-nav-block-mooc-nav column" role="navigation" aria-label$="[[outlineTitle]]">
                 <div class="block-mooc-nav-block-mooc-title black white-text">[[outlineTitle]]</div>
-                <div id="outline"><slot name="outline"></slot></div>
+                <div id="outline"></div>
               </section>
               <div id="blocks"><slot name="blocks"></slot></div>
             </responsive-grid-col>
@@ -117,7 +120,7 @@ A LRN element
     Polymer({
       is: 'mooc-content',
       listeners: {
-        'outlinemodal.tap': '_modalTap'
+        'outlinemodal.tap': '_modalTap',
       },
       observers: ['_routeChanged(data, route, endPoint)'],
       properties: {
@@ -237,6 +240,10 @@ A LRN element
           type: Object,
           value: null
         }
+      },
+      __routeChangeHander(e) {
+        const url = e.detail.url;
+        this.set('route.path', '/' + this.elmslnCourse + '/' + this.nid);
       },
       /**
        * Ensure modal is closed on tap of an item.
@@ -412,7 +419,7 @@ A LRN element
         customStyle.textContent = style;
         // we have now successfully ruined something encapsulated and once beautiful
         Polymer.dom(this.$.hackycontainer).appendChild(customStyle);
-      }
+      },
     });
   </script>
 </dom-module>

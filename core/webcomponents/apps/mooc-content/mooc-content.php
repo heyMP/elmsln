@@ -139,14 +139,53 @@ function _mooc_content_render_navigation() {
  * in the entire system.
  */
 function _mooc_content_get_outline_data() {
-  $bookoutline = _mooc_helper_book_outline(TRUE);
+  $bookoutline = _mooc_helper_book_outline();
+  $formatted_outline = $bookoutline['menu_tree'][0];
+  $formatted_outline = _mooc_content_clean_array($formatted_outline);
+  // prune out everything that's not a child
+  _mooc_content_format_book_outline($formatted_outline);
+  ddl($formatted_outline);
   return array(
     'status' => 200,
     'data' => array(
-      'outline' => drupal_render($bookoutline),
-      'aliases' => _mooc_content_get_aliases(),
+      'outline' => $formatted_outline,
     )
   );
+}
+
+
+/**
+ * Recursive Outline formatter for map-menu
+ */
+function _mooc_content_format_book_outline(&$outline, $parent = NULL) {
+  foreach ($outline as $key => &$item) {
+    $item['title'] = $item['#title'];
+    $item['url'] = $item['#href'];
+    $item['id'] = $item['#original_link']['mlid'];
+    $item['parent'] = $parent;
+    $item['children'] = _mooc_content_clean_array($item['#below']);
+    // if the item has children then run this command again
+    if (isset($item['children']) && count($item['children']) > 0) {
+      // Set this item as the parent and send it on.
+      _mooc_content_format_book_outline($item['children'], $item['id']);
+    }
+  }
+}
+
+/**
+ * Removes drupal render array items from array.
+ */
+function _mooc_content_clean_array($array) {
+  $children_keys = element_children($array);
+  // remove any non child items
+  foreach ($array as $key => $item) {
+    if (!in_array($key, $children_keys)) {
+      unset($array[$key]);
+    }
+  }
+  // index the array
+  $array = array_values($array);
+  return $array;
 }
 
 /**

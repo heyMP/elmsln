@@ -1,0 +1,42 @@
+<link rel="import" href="../../bower_components/map-menu/map-menu.html">
+
+<dom-module id="mooc-mapmenu">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      a {
+        display: none;
+      }
+    </style>
+
+    <map-menu id="outlinemenu" items="[[items]]" on-selected="__selectedHandler"></map-menu>
+    <a id="link" aria-hidden="true"></a>
+    
+  </template>
+  <script>
+    Polymer({
+      is: 'mooc-mapmenu',
+      properties: {
+        items: {
+          type: Array,
+        },
+        basePath: {
+          type: String,
+          value: '',
+        }
+      },
+
+      __selectedHandler: function (e) {
+        if (e.detail) {
+          if (e.detail.url) {
+            this.$.link.href = `${basePath}/${e.detail.url}`;
+            this.$.link.click();
+          }
+        }
+      },
+
+    });
+  </script>
+</dom-module>
