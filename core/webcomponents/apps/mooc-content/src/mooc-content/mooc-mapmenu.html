@@ -31,7 +31,7 @@
       __selectedHandler: function (e) {
         if (e.detail) {
           if (e.detail.url) {
-            this.$.link.href = `${basePath}/${e.detail.url}`;
+            this.$.link.href = `/${this.basePath}/${e.detail.url}`;
             this.$.link.click();
           }
         }
